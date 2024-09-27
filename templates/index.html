@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pipit</title>
+    <script>
+        function storeCursorPosition() {
+            var input = document.getElementById("guess");
+            localStorage.setItem("cursorPosition", input.selectionStart);
+        }
+
+        function restoreCursorPosition() {
+            var input = document.getElementById("guess");
+            var cursorPosition = localStorage.getItem("cursorPosition");
+            if (cursorPosition) {
+                input.selectionStart = cursorPosition;
+                input.selectionEnd = cursorPosition;
+            }
+        }
+        function resetForm() {
+            document.getElementById("guess").value = "...";
+        }
+        window.onload = restoreCursorPosition;
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1> Pipit
+    <img src="{{ url_for('static', filename='pipit.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left;">
+    </h1>
+    <form action="/" method="post">
+        <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()">
+    </form>
+    <h1> </h1>
+    <break></break>
+    <table>
+        <tbody>
+        {% for word in game.full_stack %}
+            <tr>
+                {% for letter in word %}
+                <td class="{% if letter in game.end %}shared{% endif %}">{{ letter }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if game.message != '' %}
+    <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
+    {% endif %}
+    {% if game.score %}
+    <p>Score: {{ game.score }}</p>
+    {% endif %}
+</body>
+</html>

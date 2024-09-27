@@ -1,0 +1,89 @@
+body {
+    background-color: #121212;
+    color: #fff;
+    /* Other dark mode styles */
+}
+
+
+h1 {
+    text-align: left;
+    font-size: 36px;
+    font-family: Arial, sans-serif;
+
+}
+
+p {
+    text-align: center;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}
+
+p.error {
+    color: red;
+}
+
+table {
+    margin: 0 auto;
+    border-spacing: 5px 10px;
+}
+
+th, td {
+    border: 1px solid rgb(101, 179, 124);
+    padding: 2px;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 50px;
+    height: 50px;
+}
+
+td.shared {
+    background-color: rgb(13, 58, 13);
+}
+
+form {
+    width: 40%; 
+    margin: 0 auto;
+    /* padding: 1%; */
+    /* border: 1px solid rgb(101, 179, 124); */
+    /* border-radius: 5px; */
+    /* background-color: #6c726d; */
+} 
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+input[type="text"] {
+    background-color: rgb(101, 179, 124);
+    color: rgb(54, 54, 54);
+    font-size: 34px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    padding: 3% 3%;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%; 
+}
+
+
+input[type="submit"] {
+    background-color: #ec9898;
+    color: rgb(29, 28, 28);
+    font-size: 10px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    padding: 5% 5%;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 auto;
+    width: 10%; 
+}
+
