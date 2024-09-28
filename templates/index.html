@@ -34,10 +34,16 @@
     <break></break>
     <table>
         <tbody>
+            <th>
+                Guess
+            </th>
+            <th>
+                Possible Shortest Paths
+            </th>
         {% for word in game.full_stack %}
             <tr>
-                {% for letter in word %}
-                <td class="{% if letter in game.end %}shared{% endif %}">{{ letter }}</td>
+                {% for key in word.keys() %}
+                <td class ="{{ key }}">{{ word[key] }}</td>
                 {% endfor %}
             </tr>
         {% endfor %}

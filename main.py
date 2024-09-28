@@ -16,12 +16,15 @@ game.init()
 
 @app.route('/', methods = ['GET', 'POST'])
 def playing():
-    if request.form['guess'] == '...':
+
+    if request.method != 'POST':
+        game.init()
+    elif request.form['guess'] == '...':
         game.init()
     else:
 
         game.valid_guess = 1
-        game.guess = request.form['guess']
+        game.guess = request.form['guess'].lower()
         game.guesses+=1
 
 

@@ -77,6 +77,7 @@ df = pd.DataFrame(possibilities, columns = cols)
 word_file = os.path.join(cwd, 'words.pickle')
 connection_file = os.path.join(cwd, 'connections.pickle')
 equivalent_file = os.path.join(cwd, 'equivalent.pickle')
+graph_file = os.path.join(cwd, 'graph.pickle')
 gen_words = 0
 
 if gen_words:
@@ -100,18 +101,21 @@ else:
 G = nx.Graph()
 G.add_nodes_from(words.keys(), label = words.values())
 G.add_edges_from(connections)
-islands = {}
-for i, c in enumerate(nx.connected_components(G)):
-    l = []
-    if len(c)<5:
-        for x in c:
-            l.append(words[x])
-    islands[i] = l
 
-start = [x for x in words.keys() if words[x] == 'pylon'][0]
-end = [x for x in words.keys() if words[x] == 'ambos'][0]
+# with open(graph_file, 'wb') as handle:
+#     pickle.dump(G, handle, protocol=pickle.HIGHEST_PROTOCOL)
+# islands = {}
+# for i, c in enumerate(nx.connected_components(G)):
+#     l = []
+#     if len(c)<5:
+#         for x in c:
+#             l.append(words[x])
+#     islands[i] = l
+
+start = [x for x in words.keys() if words[x] == 'cobra'][0]
+end = [x for x in words.keys() if words[x] == 'quiff'][0]
 #start = [n for n in G.nodes(data=True) if n['label'] == 'pylon']
-paths = list(nx.all_simple_paths(G, start, end, 4))
+paths = list(nx.all_shortest_paths(G, start, end))
 print(len(paths))
 
 # nx.draw(G)
