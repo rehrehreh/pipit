@@ -25,7 +25,7 @@
 </head>
 <body>
     <h1> Pipit
-    <img src="{{ url_for('static', filename='pipit.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left;">
+    <img src="{{ url_for('static', filename='pipit_2.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left;">
     </h1>
     <form action="/" method="post">
         <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()">
@@ -38,12 +38,12 @@
                 Guess
             </th>
             <th>
-                Possible Shortest Paths
+                Paths
             </th>
         {% for word in game.full_stack %}
             <tr>
                 {% for key in word.keys() %}
-                <td class ="{{ key }}">{{ word[key] }}</td>
+                <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
                 {% endfor %}
             </tr>
         {% endfor %}

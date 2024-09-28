@@ -21,6 +21,8 @@ def playing():
         game.init()
     elif request.form['guess'] == '...':
         game.init()
+    elif request.form['guess'] == 'give up':
+        game.give_up()
     else:
 
         game.valid_guess = 1

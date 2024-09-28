@@ -93,7 +93,7 @@ class Game():
             elif i == self.shortest_path -1:
                 # end
                 d['word'] = self.end
-                d['paths'] = 0
+                d['paths'] = 1
 
             else:
                 d['word'] = '...'
@@ -127,6 +127,12 @@ class Game():
             self.ending.append(temp_end)
             if self.local:
                 print(temp_end)
+        self.full_stack = []
+        for i, num in enumerate(self.paths[0]):
+            word = self.words[num]
+            self.current_node = [x for x in self.words.keys() if self.words[x] == word][0]
+            self.current_word_paths = [x for x in self.paths if self.current_node in x]
+            self.full_stack.append({'word':word, 'paths': len(self.current_word_paths)})
         return
 
 
@@ -224,7 +230,8 @@ class Game():
         if self.end == self.guess:
             self.message='You win!'
             self.playing = 0
-            self.gen_full()
+            self.full_stack[len(self.word_stack)]['word'] = self.current_word
+            self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
             self.end_time = time.perf_counter()
             self.total_time = round(self.end_time - self.start_time, 1)
         else:
@@ -246,7 +253,7 @@ class Game():
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
                 self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
-                self.full_stack.append({'word':self.end, 'paths':0})
+                self.full_stack.append({'word':self.end, 'paths':1})
             
             
         return

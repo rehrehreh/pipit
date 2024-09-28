@@ -1,3 +1,15 @@
+:root {
+    --primary-color: #b4c080;
+    --primary-border: #5c682d;
+    --secondary-text: #ffffff; 
+    --lost:         #dd9f9f;
+    --lost-text:    #751010;
+    --lost-border: #751010;
+    --primary-text: hwb(0 40% 59%); 
+    --border: 3px solid var(--primary-border);
+    --border-lost: 3px solid var(--lost-border);
+  }
+
 body {
     background-color: #121212;
     color: #fff;
@@ -27,8 +39,9 @@ table {
     border-spacing: 5px 10px;
 }
 
-th, td {
-    border: 1px solid #f8b25d;
+th {
+    border: var(--border);
+    color: var(--secondary-text);
     padding: 2px;
     border-radius: 5px;
     text-align: center;
@@ -36,17 +49,44 @@ th, td {
     font-size: 24px;
     font-weight: bold;
     text-transform: uppercase;
-
     height: 50px;
 }
 
+
+td {
+    border: var(--border);
+    padding: 2px;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 50px;
+    color: var(--primary-text);
+}
+
 td.word {
-    background-color: #af906d;
     width: 200px;
+    background-color: var(--primary-color)
+}
+
+td.word.lost {
+    background-color: var(--lost) ;
+    color: var(--lost-text);
+    border: var(--border-lost);
 }
 
 td.paths {
-    width: 50px;
+    width: 90px;
+    color: var(--secondary-text);
+}
+
+
+td.paths.lost {
+    background-color: var(--lost) ;
+    color: var(--lost-text);
+    border: var(--border-lost);
 }
 
 form {
@@ -65,30 +105,18 @@ label {
 
 
 input[type="text"] {
-    background-color: #af906d;
-    color: rgb(255, 255, 255);
+    background-color: var(--primary-color);
+    color: var(--primary-text);
     font-size: 34px;
     text-align: center;
     font-family: Arial, sans-serif;
     padding: 3% 3%;
-    border: none;
+    border: var(--border);
     border-radius: 3px;
     cursor: pointer;
     width: 100%; 
 }
 
-
-input[type="submit"] {
-    background-color: #ec9898;
-    color: rgb(255, 255, 255);
-    font-size: 10px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    padding: 5% 5%;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin: 0 auto;
-    width: 10%; 
+input[type="text"]::placeholder {
+    color: var(--primary-text);
 }
-
