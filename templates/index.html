@@ -28,27 +28,47 @@
     <img src="{{ url_for('static', filename='pipit_2.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left;">
     </h1>
     <form action="/" method="post">
-        <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()">
+        <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()" spellcheck="false" autocomplete="off" autocorrect=""off>
     </form>
     <h1> </h1>
     <break></break>
-    <table>
-        <tbody>
-            <th>
-                Guess
-            </th>
-            <th>
-                Paths
-            </th>
-        {% for word in game.full_stack %}
-            <tr>
-                {% for key in word.keys() %}
-                <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container"></div>
+        <table>
+            <tbody>
+                <th>
+                    Guess
+                </th>
+                <th>
+                    Paths
+                </th>
+            {% for word in game.full_stack %}
+                <tr>
+                    {% for key in word.keys() %}
+                    <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+            <div id="counter" class="flip">47</div>
+            <script>
+              let counter = 47;
+              const intervalId = setInterval(() => {
+                counter--;
+                document.getElementById("counter").textContent = counter;
+                if (counter <= 17) {
+                  clearInterval(intervalId);
+                }
+              }, 500/30); // Adjust the interval time as needed
+            </script>
+        </div>
+        <script>
+            const flipElement = document.querySelector('.flip');
+            const initialValue = parseInt(document.querySelector('.starting_num').textContent);
+        
+            flipElement.style.setProperty('--num', initialValue);
+          </script>
+    </div>
     {% if game.message != '' %}
     <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
     {% endif %}
@@ -56,4 +76,5 @@
     <p>Score: {{ game.score }}</p>
     {% endif %}
 </body>
+
 </html>
