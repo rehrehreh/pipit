@@ -246,9 +246,11 @@ class Game():
 
             # update full stack
             if len(self.word_stack) <= len(self.full_stack) - 3:
+                # update the starting dictionary
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
             else:
+                # append the full dictionary
                 d = {'word': self.current_word, 'paths' : len(self.current_word_paths)}
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)

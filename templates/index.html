@@ -44,30 +44,38 @@
             {% for word in game.full_stack %}
                 <tr>
                     {% for key in word.keys() %}
-                    <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
+                        {% if key == 'paths' %}
+                            {% if word[key] != '??' %}
+                                <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %} flip" id="counter"> {{ word[key] }}</td>
+                                <input type="hidden" id="counter_start" value="{{ game.full_stack[loop.index0 - 1]['paths'] }}">
+                                <input type="hidden" id="counter_end" value="{{ word['paths'] }}">
+                                <script>
+                                    let counter = document.querySelector('#counter_start').value;
+                                    const intervalId = setInterval(() => {
+                                        counter--;
+                                        document.getElementById("counter").textContent = counter;
+                                        if (counter <= document.querySelector('#counter_end').value) {
+                                        clearInterval(intervalId);
+                                        }
+                                    }, 0.5); // Adjust the interval time as needed
+                                </script>
+                                <script>
+                                    const flipElement = document.querySelector('.flip');
+                                    const initialValue = parseInt(document.querySelector('.starting_num').textContent);
+                                    flipElement.style.setProperty('--num', initialValue);
+                                </script>
+                            {% else %}
+                                <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
+                            {% endif %}
+                        {% else %}
+                            <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-            <div id="counter" class="flip">47</div>
-            <script>
-              let counter = 47;
-              const intervalId = setInterval(() => {
-                counter--;
-                document.getElementById("counter").textContent = counter;
-                if (counter <= 17) {
-                  clearInterval(intervalId);
-                }
-              }, 500/30); // Adjust the interval time as needed
-            </script>
-        </div>
-        <script>
-            const flipElement = document.querySelector('.flip');
-            const initialValue = parseInt(document.querySelector('.starting_num').textContent);
-        
-            flipElement.style.setProperty('--num', initialValue);
-          </script>
+
     </div>
     {% if game.message != '' %}
     <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
