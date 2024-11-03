@@ -15,10 +15,15 @@ import datetime
 import networkx as nx
 import json
 
+from PyDictionary import PyDictionary
+
+
+
 class Game():
     def __init__(self):
         self.dict = enchant.Dict("en_US") 
         self.cwd = os.getcwd()
+        self.dictionary = PyDictionary()
         # Get words
         self.word_file = os.path.join(self.cwd, 'words.pickle')
         self.paths_file = os.path.join(self.cwd, 'paths.pickle')
@@ -88,11 +93,13 @@ class Game():
             if i == 0:
                 # start
                 d['word'] = self.start
+                d['def'] = self.dictionary.meaning(self.start, disable_errors=True)
                 d['paths'] = len(self.paths)
 
             elif i == self.shortest_path -1:
                 # end
                 d['word'] = self.end
+                d['def'] = self.dictionary.meaning(self.end, disable_errors=True)
                 d['paths'] = 1
 
             else:
@@ -149,13 +156,11 @@ class Game():
         self.start_node = [x for x in self.words.keys() if self.words[x] == self.start][0]
         self.end_node = [x for x in self.words.keys() if self.words[x] == self.end][0]
         self.shortest_path_path = nx.shortest_path(self.G, self.start_node, self.end_node)
-        print(self.shortest_path_path)
         self.shortest_path = len(self.shortest_path_path)
         if type(self.shortest_path) == 0:
             return 0
         print('findingpaths')
         self.paths = list(nx.all_shortest_paths(self.G, self.start_node, self.end_node))
-        print(self.paths)
         with open(self.paths_file, 'wb') as handle:
             pickle.dump(self.paths, handle, protocol=pickle.HIGHEST_PROTOCOL)
         return len(self.paths)
@@ -249,11 +254,12 @@ class Game():
                 # update the starting dictionary
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
+                self.full_stack[len(self.word_stack)]['def'] = self.dictionary.meaning(self.current_word, disable_errors=True)
             else:
                 # append the full dictionary
-                d = {'word': self.current_word, 'paths' : len(self.current_word_paths)}
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
+                self.full_stack[len(self.word_stack)]['def'] = self.dictionary.meaning(self.current_word, disable_errors=True)
                 self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
                 self.full_stack.append({'word':self.end, 'paths':1})
             

@@ -53,9 +53,9 @@
             {% for word in game.full_stack %}
             {% set rowloop = loop %}
                 <tr>
-                    {% for key in word.keys() %}
-                        {% if key == 'paths' and not rowloop.last and not rowloop.first %}
-                            {% if word[key] != '??' and game.full_stack[rowloop.index0 + 1]['paths'] == '??' %}
+                    {% for key in ['word', 'paths'] %}
+                        {% if key == 'paths' %}
+                            {% if not rowloop.last and not rowloop.first and word['paths'] != '??' and game.full_stack[rowloop.index0 + 1]['paths'] == '??' %}
                                 <td>
                                     <div class="flip" id="counter"> {{ word[key] }}</div>
                                 <script>
@@ -90,7 +90,27 @@
                                 <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
                             {% endif %}
                         {% else %}
-                            <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
+                            <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}" id="{{ 'popop_' ~ rowloop.index0 }}">{{ word[key] }}
+                            {% if 'def' in word.keys() %}
+                            <div class="popup">
+                                <span class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ word['def'] }}</span>
+                            </div>
+                            <script>
+                                const elementToHover = document.getElementById("{{ 'popup_' ~ rowloop.index0 }}");
+                                const elementToPopup = document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}");
+                        
+                                elementToHover.addEventListener('mouseenter',
+                                    () => {
+                                        elementToPopup.style.display = 'block';
+                                    });
+                        
+                                elementToHover.addEventListener('mouseleave',
+                                    () => {
+                                        elementToPopup.style.display = 'none';
+                                    });
+                            </script>
+                            {% endif %}
+                        </td>
                         {% endif %}
                     {% endfor %}
                 </tr>
