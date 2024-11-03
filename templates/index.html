@@ -42,28 +42,41 @@
                     Paths
                 </th>
             {% for word in game.full_stack %}
+            {% set rowloop = loop %}
                 <tr>
                     {% for key in word.keys() %}
-                        {% if key == 'paths' %}
-                            {% if word[key] != '??' %}
-                                <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %} flip" id="counter"> {{ word[key] }}</td>
-                                <input type="hidden" id="counter_start" value="{{ game.full_stack[loop.index0 - 1]['paths'] }}">
-                                <input type="hidden" id="counter_end" value="{{ word['paths'] }}">
+                        {% if key == 'paths' and not rowloop.last and not rowloop.first %}
+                            {% if word[key] != '??' and game.full_stack[rowloop.index0 + 1]['paths'] == '??' %}
+                                <td>
+                                    <div class="flip" id="counter"> {{ word[key] }}</div>
                                 <script>
-                                    let counter = document.querySelector('#counter_start').value;
+                                    var counter_start = Number("{{ game.full_stack[rowloop.index0 - 1]['paths'] }}")
+                                    var counter_end = Number("{{ word[key] }}")
+                                    if (counter_end >= counter_start) {
+                                        // up
+                                        direction = 1;
+                                    }
+                                    else {
+                                        // down
+                                        direction = -1;
+                                    }
+                                    var counter_diff = Math.abs(counter_end - counter_start)
+                                    var interval = Math.max(Math.ceil(Math.sqrt(counter_diff)/10), 1);
+                                    let counter = counter_start;
                                     const intervalId = setInterval(() => {
-                                        counter--;
+                                        counter+=interval*direction;
                                         document.getElementById("counter").textContent = counter;
-                                        if (counter <= document.querySelector('#counter_end').value) {
+                                        if (counter <= counter_end && direction == -1) {
                                         clearInterval(intervalId);
+                                        document.getElementById("counter").textContent = counter = counter_end;
                                         }
-                                    }, 0.5); // Adjust the interval time as needed
+                                        else if (counter >= counter_end && direction == 1) {
+                                        clearInterval(intervalId);
+                                        document.getElementById("counter").textContent = counter = counter_end;
+                                        }
+                                    }, 1); // Adjust the interval time as needed
                                 </script>
-                                <script>
-                                    const flipElement = document.querySelector('.flip');
-                                    const initialValue = parseInt(document.querySelector('.starting_num').textContent);
-                                    flipElement.style.setProperty('--num', initialValue);
-                                </script>
+                                </td>
                             {% else %}
                                 <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
                             {% endif %}
@@ -75,7 +88,11 @@
             {% endfor %}
             </tbody>
         </table>
-
+        <script>
+            const flipElement = document.querySelector('.flip');
+            const initialValue = parseInt(document.querySelector('.starting_num').textContent);
+            flipElement.style.setProperty('--num', initialValue);
+        </script>
     </div>
     {% if game.message != '' %}
     <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
