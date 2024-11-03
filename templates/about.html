@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pipit</title>
+    <script>
+        function storeCursorPosition() {
+            var input = document.getElementById("guess");
+            localStorage.setItem("cursorPosition", input.selectionStart);
+        }
+
+        function restoreCursorPosition() {
+            var input = document.getElementById("guess");
+            var cursorPosition = localStorage.getItem("cursorPosition");
+            if (cursorPosition) {
+                input.selectionStart = cursorPosition;
+                input.selectionEnd = cursorPosition;
+            }
+        }
+        function resetForm() {
+            document.getElementById("guess").value = "...";
+        }
+        window.onload = restoreCursorPosition;
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <h1> Pipit
+        <img src="{{ url_for('static', filename='pipit_2.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left; position:relative">
+        </h1>
+        <ul> 
+            {% for item in nav.top %} 
+            <li class="{{ 'active' if item.is_active else '' }}"> 
+                <a href="{{ url_for(item.label) }}">{{ item.label }}</a> 
+            </li> 
+            {% endfor %} 
+        </ul> 
+    </nav>
+    <main> 
+        <p>This is the main content of my web page.</p>
+    </main>
+</body>
+</html>
