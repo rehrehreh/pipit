@@ -213,7 +213,7 @@ class Game():
         self.is_5 = len(self.guess)==5
         if not self.is_5:
             self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" is not 5 letters, try again'
+            self.message = f'"{self.guess}" is not 5 letters, loser'
             self.valid_guess = 0
         return
 
@@ -222,7 +222,7 @@ class Game():
         self.is_word = self.dict.check(self.guess)
         if not self.is_word:
             self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" not found in dictionary, try again.'
+            self.message = f'"{self.guess}" not found in dictionary, loser.'
             self.valid_guess = 0
         return
 
@@ -268,7 +268,7 @@ class Game():
         self.shared_letters = sum((self.current_counter & self.guess_counter).values())
         if self.shared_letters != 4:
             self.invalid_guesses.append(self.guess)
-            self.message =f'"{self.guess}" does not change only a single letter, try again'
+            self.message =f'"{self.guess}" does not change only a single letter, loser'
             self.valid_guess = 0
         return
 

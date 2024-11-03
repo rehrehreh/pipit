@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #b4c080;
-    --primary-border: #5c682d;
+    --primary-color: #a8b95b;
+    --primary-border: #5f6e1f;
     --secondary-text: #ffffff; 
     --lost:         #dd9f9f;
     --lost-text:    #751010;
@@ -8,12 +8,19 @@
     --primary-text: #ffffff; 
     --border: 3px solid var(--primary-border);
     --border-lost: 3px solid var(--lost-border);
+    --background-color: #1a1919;
   }
 
 body {
-    background-color: #121212;
+    background-color: var(--background-color);
     color: #fff;
+    height: 100%;
+    display: inline;
     /* Other dark mode styles */
+}
+html {
+    margin: 0;
+    height: 100%;
 }
 
 
@@ -21,6 +28,9 @@ h1 {
     text-align: left;
     font-size: 36px;
     font-family: Arial, sans-serif;
+    margin: 0;
+    margin-left: 1%;
+    margin-top: 1%;
 
 }
 
@@ -126,8 +136,45 @@ input[type="text"]::placeholder {
     color: var(--primary-text);
 }
 
-.container {
-    width:100%;
-    height: 100%;
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
+    background-color: var(--background-color);
+}
+
+li {
+    float: right;
+    background-color: var(--background-color)
+}
+
+li:last-child {
+    border-left: none;
+}
+
+li a {
+    display: block;
+    color: var(--primary-border);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+li a:hover {
+    background-color: var(--primary-color);
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }
