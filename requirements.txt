@@ -1,1 +1,6 @@
-Flask==2.1.2
+Flask==2.3.1
+flask-navigation
+pyenchant
+requests
+networkx
+PyDictionary

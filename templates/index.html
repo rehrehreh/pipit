@@ -90,23 +90,18 @@
                                 <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}">{{ word[key] }}</td>
                             {% endif %}
                         {% else %}
-                            <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}" id="{{ 'popop_' ~ rowloop.index0 }}">{{ word[key] }}
+                            <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}" id="{{ 'popup_' ~ rowloop.index0 }}">{{ word[key] }}
                             {% if 'def' in word.keys() %}
-                            <div class="popup">
-                                <span class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ word['def'] }}</span>
-                            </div>
+                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ word['def'] }}</div>
                             <script>
-                                const elementToHover = document.getElementById("{{ 'popup_' ~ rowloop.index0 }}");
-                                const elementToPopup = document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}");
-                        
-                                elementToHover.addEventListener('mouseenter',
+                                document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseenter',
                                     () => {
-                                        elementToPopup.style.display = 'block';
+                                        document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}").classList.add('show');
                                     });
                         
-                                elementToHover.addEventListener('mouseleave',
+                                    document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseleave',
                                     () => {
-                                        elementToPopup.style.display = 'none';
+                                        document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}").classList.remove('show');
                                     });
                             </script>
                             {% endif %}
