@@ -4,7 +4,6 @@ Created on Fri Sep 20 20:14:53 2024
 
 @author: matth
 """
-import enchant
 import random
 import requests
 from collections import Counter
@@ -17,7 +16,6 @@ import json
 
 class Game():
     def __init__(self):
-        self.dict = enchant.Dict("en_US") 
         self.cwd = os.getcwd()
         self.node_list = []
         # Get words
@@ -203,7 +201,7 @@ class Game():
 
 
     def check_is_word(self):
-        self.is_word = self.dict.check(self.guess)
+        self.is_word = self.guess in self.word_list.keys()
         if not self.is_word:
             self.invalid_guesses.append(self.guess)
             self.message = f'"{self.guess}" not found in dictionary, try again.'
