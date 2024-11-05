@@ -201,7 +201,7 @@ class Game():
 
 
     def check_is_word(self):
-        self.is_word = self.guess in self.word_list.keys()
+        self.is_word = self.guess in self.word_list
         if not self.is_word:
             self.invalid_guesses.append(self.guess)
             self.message = f'"{self.guess}" not found in dictionary, try again.'
