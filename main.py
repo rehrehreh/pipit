@@ -29,8 +29,12 @@ game.init()
 def Play():
 
     if request.method != 'POST':
+        game = Game()
+        game.local = 0
         game.init()
     elif request.form['guess'] == '...':
+        game = Game()
+        game.local = 0
         game.init()
     elif request.form['guess'] == 'give up':
         game.give_up()
