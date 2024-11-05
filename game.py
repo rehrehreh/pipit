@@ -21,7 +21,7 @@ class Game():
         self.cwd = os.getcwd()
         self.node_list = []
         # Get words
-        self.word_file = os.path.join(self.cwd, 'words.pickle')
+        self.word_file = os.path.join(self.cwd, 'new_words.pickle')
         self.paths_file = os.path.join(self.cwd, 'paths.pickle')
         self.config_file = os.path.join(self.cwd, 'config.json')
 
