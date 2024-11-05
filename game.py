@@ -15,23 +15,19 @@ import datetime
 import networkx as nx
 import json
 
-from PyDictionary import PyDictionary
-
-
-
 class Game():
     def __init__(self):
         self.dict = enchant.Dict("en_US") 
         self.cwd = os.getcwd()
-        self.dictionary = PyDictionary()
+        self.node_list = []
         # Get words
-        self.word_file = os.path.join(self.cwd, 'words.pickle')
+        self.word_file = os.path.join(self.cwd, 'new_words.pickle')
         self.paths_file = os.path.join(self.cwd, 'paths.pickle')
         self.config_file = os.path.join(self.cwd, 'config.json')
 
         with open(self.word_file, 'rb') as handle:
             self.words = pickle.load(handle)
-        self.word_list = list(self.words.values())
+        self.word_list = list(self.words.keys())
         self.word_length = len(self.word_list)
 
         self.config_dict = {}
@@ -42,6 +38,7 @@ class Game():
         if not self.check_config():
             self.start_num = int(random.random() * self.word_length)
             self.start = self.word_list[self.start_num]
+            self.node_list.append(self.words[self.start]['node'])
             self.start_counter = Counter(self.start)
             self.make_graph()
             self.get_end()
@@ -51,8 +48,7 @@ class Game():
 
         # Set init values
         self.local = 1
-
-
+        
 
     def check_config(self):
         equivalent = 0
@@ -93,13 +89,13 @@ class Game():
             if i == 0:
                 # start
                 d['word'] = self.start
-                d['def'] = self.dictionary.meaning(self.start, disable_errors=True)
+                d['def'] = self.words[self.start]['definition']
                 d['paths'] = len(self.paths)
 
             elif i == self.shortest_path -1:
                 # end
                 d['word'] = self.end
-                d['def'] = self.dictionary.meaning(self.end, disable_errors=True)
+                d['def'] = self.words[self.end]['definition']
                 d['paths'] = 1
 
             else:
@@ -126,20 +122,14 @@ class Game():
 
 
     def give_up(self):
-        self.ending = []
-        for path in self.paths:
-            temp_end = []
-            for num in path:
-                temp_end.append(self.words[num])
-            self.ending.append(temp_end)
-            if self.local:
-                print(temp_end)
         self.full_stack = []
+        self.node_list = []
         for i, num in enumerate(self.paths[0]):
-            word = self.words[num]
-            self.current_node = [x for x in self.words.keys() if self.words[x] == word][0]
-            self.current_word_paths = [x for x in self.paths if self.current_node in x]
-            self.full_stack.append({'word':word, 'paths': len(self.current_word_paths)})
+            word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
+            self.node_list.append(num)
+            self.current_node = self.words[word]['node']
+            self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
+            self.full_stack.append({'word':word, 'paths': len(self.current_word_paths), 'def': self.words[word]['definition']})
         return
 
 
@@ -153,8 +143,8 @@ class Game():
         return
     
     def generate_paths(self):
-        self.start_node = [x for x in self.words.keys() if self.words[x] == self.start][0]
-        self.end_node = [x for x in self.words.keys() if self.words[x] == self.end][0]
+        self.start_node = self.words[self.start]['node']
+        self.end_node = self.words[self.end]['node']
         self.shortest_path_path = nx.shortest_path(self.G, self.start_node, self.end_node)
         self.shortest_path = len(self.shortest_path_path)
         if type(self.shortest_path) == 0:
@@ -203,22 +193,11 @@ class Game():
                 print(f'Invalid Penalties: {self.invalid_penalty}')
         return
 
-    def print_stack(self):
-        if self.local:
-            print('Word stack:')
-            print(self.start)
-            for x in self.word_stack:
-                print(x)
-            if self.playing:
-                print('...')
-            print(self.end)
-        return
-
     def check_is_5(self):
         self.is_5 = len(self.guess)==5
         if not self.is_5:
             self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" is not 5 letters, loser'
+            self.message = f'"{self.guess}" is not 5 letters, try again'
             self.valid_guess = 0
         return
 
@@ -227,7 +206,7 @@ class Game():
         self.is_word = self.dict.check(self.guess)
         if not self.is_word:
             self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" not found in dictionary, loser.'
+            self.message = f'"{self.guess}" not found in dictionary, try again.'
             self.valid_guess = 0
         return
 
@@ -246,24 +225,23 @@ class Game():
             self.word_stack.append(self.guess)
 
             # Find how many paths remain
-            self.current_node = [x for x in self.words.keys() if self.words[x] == self.current_word][0]
-            self.current_word_paths = [x for x in self.paths if self.current_node in x]
+            self.current_node = self.words[self.current_word]['node']
+            self.node_list.append(self.current_node)
+            self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
 
             # update full stack
             if len(self.word_stack) <= len(self.full_stack) - 3:
                 # update the starting dictionary
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-                self.full_stack[len(self.word_stack)]['def'] = self.dictionary.meaning(self.current_word, disable_errors=True)
+                self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
             else:
                 # append the full dictionary
                 self.full_stack[len(self.word_stack)]['word'] = self.current_word
                 self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-                self.full_stack[len(self.word_stack)]['def'] = self.dictionary.meaning(self.current_word, disable_errors=True)
+                self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
                 self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
                 self.full_stack.append({'word':self.end, 'paths':1})
-            
-            
         return
 
 
@@ -274,7 +252,7 @@ class Game():
         self.shared_letters = sum((self.current_counter & self.guess_counter).values())
         if self.shared_letters != 4:
             self.invalid_guesses.append(self.guess)
-            self.message =f'"{self.guess}" does not change only a single letter, loser'
+            self.message =f'"{self.guess}" does not change only a single letter, try again'
             self.valid_guess = 0
         return
 
@@ -284,7 +262,6 @@ class Game():
         while self.playing:  
             self.valid_guess = 1
             self.print_metrics()
-            self.print_stack()
 
             self.guess = input('Next Word: ').lower()
             if self.guess == 'give up':
