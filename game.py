@@ -228,19 +228,13 @@ class Game():
             self.node_list.append(self.current_node)
             self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
 
+            self.full_stack[len(self.word_stack)]['word'] = self.current_word
+            self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
+            self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
             # update full stack
-            if len(self.word_stack) <= len(self.full_stack) - 3:
-                # update the starting dictionary
-                self.full_stack[len(self.word_stack)]['word'] = self.current_word
-                self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-                self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
-            else:
-                # append the full dictionary
-                self.full_stack[len(self.word_stack)]['word'] = self.current_word
-                self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-                self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
-                self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
-                self.full_stack.append({'word':self.end, 'paths':1})
+            # if len(self.word_stack) > (len(self.full_stack) - 3):
+            #     self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
+            #     self.full_stack.append({'word':self.end, 'paths':1})
         return
 
 
