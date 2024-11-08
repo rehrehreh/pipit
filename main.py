@@ -31,15 +31,14 @@ def Play():
     if request.method != 'POST':
         None
     elif request.form['guess'] == '...':
+        game = Game()
         game.init()
     elif request.form['guess'] == 'give up':
         game.give_up()
     else:
-
         game.valid_guess = 1
         game.guess = request.form['guess'].lower()
         game.guesses+=1
-
 
         # check if 5 letters
         game.check_is_5()

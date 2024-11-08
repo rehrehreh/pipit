@@ -80,6 +80,7 @@ class Game():
     def starting_stack(self):
         # empyt dict
         # fill dict with word stack
+        self.node_list = []
         self.node_list.append(self.words[self.start]['node'])
         self.full_stack = []
         for i in range(0, self.shortest_path):
@@ -108,7 +109,6 @@ class Game():
         self.current_word = self.start
         self.word_stack = []
         self.invalid_guesses = []
-        self.node_list = []
         self.guesses = 0
         self.message = ''
         self.valid_guess = 1
