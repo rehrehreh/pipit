@@ -25,7 +25,7 @@ game = Game()
 game.init()
 
 
-@app.route('/play', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def Play():
     
     if 'user' in session:
