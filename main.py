@@ -33,7 +33,7 @@ def start():
 @app.route('/play', methods = ['GET', 'POST'])
 def Play():
     
-    if 'game' in session:
+    if 'user' in session:
         if request.method != 'POST':
             None
         elif request.form['guess'] == '...':
