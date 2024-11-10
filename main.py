@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for 
 import collections
 collections.MutableMapping = collections.abc.MutableMapping
 collections.MutableSequence = collections.abc.MutableSequence
@@ -13,6 +13,7 @@ class Test:
 
 
 app = Flask(__name__)
+app.secret_key = "meowmeowmeow"
 nav = Navigation(app)
 nav.Bar('top', [ 
     nav.Item('Play', 'Play'),
@@ -24,21 +25,31 @@ game = Game()
 game.local = 0
 game.init()
 
+@app.route('/')
+def start():
+    session['game'] = Game()
+    return redirect(url_for('Play'))
 
-@app.route('/', methods = ['GET', 'POST'])
+
+@app.route('/play', methods = ['GET', 'POST'])
 def Play():
+    
+    if 'game' in session:
+        if request.method != 'POST':
+            None
+        elif request.form['guess'] == '...':
+            session['game'].init()
+        elif request.form['guess'] == 'give up':
+            session['game'].give_up()
+        else:
+            # Guessing
+            session['game'].check_guess(request.form['guess'].lower())     
+        return render_template('index.html', game=session['game'])
 
-    if request.method != 'POST':
-        None
-    elif request.form['guess'] == '...':
-        game.init()
-    elif request.form['guess'] == 'give up':
-        game.give_up()
     else:
-        # Guessing
-        game.check_guess(request.form['guess'].lower())        
+        return redirect(url_for('start'))
 
-    return render_template('index.html', game=game)
+    
 
 
 @app.route('/about') 
