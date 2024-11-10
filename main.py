@@ -35,13 +35,16 @@ def Play():
             game.init()
         elif request.form['guess'] == 'give up':
             game.give_up()
+            session.pop('user')
         else:
             # Guessing
-            game.check_guess(request.form['guess'].lower())     
+            game.check_guess(request.form['guess'].lower())
+            if game.playing == 0:
+                session.pop('user')
         return render_template('index.html', game=game)
 
     else:
-        session['user'] = 'hello'
+        session['user'] = request.remote_addr
         return render_template('index.html', game=game)
 
     
