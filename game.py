@@ -93,8 +93,6 @@ class Game():
             self.starting_difference = 5 - sum((self.start_counter & self.end_counter).values())
             if self.starting_difference in [4, 5]:
                 paths_exist = self.generate_paths()
-                print(f'possible game: {self.start} ->{self.end}')
-                print(f'paths: {len(self.paths)}')
                 if paths_exist > 0:
                     need_end = 0
         return
@@ -106,7 +104,6 @@ class Game():
         self.shortest_path = len(self.shortest_path_path)
         if type(self.shortest_path) == 0:
             return 0
-        print('findingpaths')
         self.paths = list(nx.all_shortest_paths(self.G, self.start_node, self.end_node))
         with open(self.paths_file, 'wb') as handle:
             pickle.dump(self.paths, handle, protocol=pickle.HIGHEST_PROTOCOL)
