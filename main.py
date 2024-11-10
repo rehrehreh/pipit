@@ -42,7 +42,7 @@ def Play():
 
     else:
         session['user'] = 'hello'
-        return
+        return render_template('index.html', game=game)
 
     
 

@@ -135,6 +135,7 @@ class Game():
     def init(self):
         self.playing = 1
         self.current_word = self.start
+        self.current_node = self.start_node
         self.full_stack = []
         self.word_stack = []
         self.node_list = []
