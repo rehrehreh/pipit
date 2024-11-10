@@ -133,17 +133,18 @@ class Game():
         for i in range(0, self.shortest_path):
             if i == 0:
                 # start
-                full_stack['start'] = {}
-                full_stack['start']['word'] = self.start
-                full_stack['start']['def'] = self.words[self.start]['definition']
-                full_stack['start']['paths'] = len(self.paths)
+                full_stack[i] = {}
+                full_stack[i]['word'] = self.start
+                full_stack[i]['def'] = self.words[self.start]['definition']
+                full_stack[i]['paths'] = len(self.paths)
 
             elif i == self.shortest_path -1:
                 # end
-                full_stack['end'] = {}
-                full_stack['end']['word'] = self.end
-                full_stack['end']['def'] = self.words[self.end]['definition']
-                full_stack['end']['paths'] = 1
+                n = 99
+                full_stack[n] = {}
+                full_stack[n]['word'] = self.end
+                full_stack[n]['def'] = self.words[self.end]['definition']
+                full_stack[n]['paths'] = 1
 
             else:
                 full_stack[i] = {}
@@ -158,21 +159,15 @@ class Game():
         full_stack = {}
         node_list = []
         for i, num in enumerate(self.paths[0]):
-            if i == 0:
-                stack_n = 'start'
-            elif i == len(self.paths[0])-1:
-                stack_n = 'end'
-            else:
-                stack_n = i
             word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
             node_list.append(num)
             current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
             definition = self.words[word]['definition']
 
-            full_stack[stack_n] = {}
-            full_stack[stack_n]['word'] = word
-            full_stack[stack_n]['def'] = definition
-            full_stack[stack_n]['paths'] = len(current_word_paths)
+            full_stack[i] = {}
+            full_stack[i]['word'] = word
+            full_stack[i]['def'] = definition
+            full_stack[i]['paths'] = len(current_word_paths)
         return 2, 'This is one possible shortest path', full_stack
     
 #############################
@@ -247,7 +242,7 @@ class Game():
     def latest_word(self, full_stack):
         temp = []
         for key in full_stack.keys():
-            if key in ['start', 'end']:
+            if key == 99:
                 continue
             
             if full_stack[key]['word'] == '...':
@@ -264,7 +259,7 @@ class Game():
         node_list = []
         node_list.append(self.words[self.start_node])
         for key in full_stack.keys():
-            if key in ['start', 'end'] or full_stack[key]['word'] == '...':
+            if full_stack[key]['word'] == '...' or key == 99:
                 continue
             word = full_stack[key]['word']
             node_list.append(self.words[word]['node'])
