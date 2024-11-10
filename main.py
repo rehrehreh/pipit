@@ -24,11 +24,6 @@ nav.Bar('top', [
 game = Game()
 game.init()
 
-@app.route('/')
-def start():
-    session['user'] = 'hello'
-    return redirect(url_for('Play'))
-
 
 @app.route('/play', methods = ['GET', 'POST'])
 def Play():
@@ -46,7 +41,8 @@ def Play():
         return render_template('index.html', game=game)
 
     else:
-        return redirect(url_for('start'))
+        session['user'] = 'hello'
+        return
 
     
 
