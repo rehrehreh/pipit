@@ -250,7 +250,7 @@ class Game():
         self.shared_letters = sum((self.current_counter & self.guess_counter).values())
         if self.shared_letters != 4:
             self.invalid_guesses.append(self.guess)
-            self.message =f'"{self.guess}" does not change only a single letter, try again'
+            self.message =f'"{self.guess}" does not change only a single letter from "{self.current_word}", try again'
             self.valid_guess = 0
         return
 
