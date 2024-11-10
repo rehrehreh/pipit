@@ -266,6 +266,6 @@ class Game():
 
         full_stack[stack_n] = {}
         full_stack[stack_n]['word'] = guess
-        full_stack[stack_n]['def'] = self.words[self.current_word]['definition']
+        full_stack[stack_n]['def'] = self.words[guess]['definition']
         full_stack[stack_n]['paths'] = len(current_word_paths)
         return full_stack
