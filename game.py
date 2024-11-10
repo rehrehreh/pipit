@@ -242,6 +242,7 @@ class Game():
     def latest_word(self, full_stack):
         temp = []
         for key in full_stack.keys():
+            key = int(key)
             if key == 99:
                 continue
             
