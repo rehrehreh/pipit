@@ -58,7 +58,7 @@
                             {% if stack != 99 and stack !=0 and game.full_stack[stack]['paths'] != '??' %}
                                 <td>
                                     <div class="flip" id="counter"> {{ game.full_stack[stack]['paths'] }}</div>
-                                <script>
+                                <!-- <script>
                                     var counter_start = Number("{{ game.full_stack[stack - 1]['paths'] }}")
                                     var counter_end = Number("{{ game.full_stack[stack]['paths'] }}")
                                     if (counter_end >= counter_start) {
@@ -84,7 +84,7 @@
                                         document.getElementById("counter").textContent = counter = counter_end;
                                         }
                                     }, 1); // Adjust the interval time as needed
-                                </script>
+                                </script> -->
                                 </td>
                             {% else %}
                                 <td class ="{{ key }}{% if game.full_stack[stack]['paths']==0 %} lost{% endif %}">{{ game.full_stack[stack]['paths'] }}</td>
