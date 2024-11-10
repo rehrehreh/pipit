@@ -46,7 +46,7 @@ def Play():
         else:
             # Guessing
             session['state'].valid_guess, session['state'].message, session['state'].full_stack = \
-                game.check_guess(request.form['guess'], session['state'].full_stack)
+                game.check_guess(request.form['guess'], session['state']['full_stack'])
 
         return render_template('index.html', game=session['state'])
 
