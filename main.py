@@ -41,6 +41,8 @@ def Play():
             None
         elif request.form['guess'] == '...':
             session.clear()
+            session['user'] = request.remote_addr
+            session['state'] = state_intermediate(game).__dict__
         elif request.form['guess'] == 'give up':
             session['state']['valid_guess'], session['state']['message'], session['state']['full_stack'] = game.give_up()
         else:
