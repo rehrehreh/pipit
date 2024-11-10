@@ -17,14 +17,10 @@ import json
 class Game():
     def __init__(self):
         self.cwd = os.getcwd()
-        self.node_list = []
         self.start_up()
         self.config_startup()
-
-
+        self.valid_message = 'Valid Input!'
         
-        
-
     def start_up(self):
         # This function sets the paths of initial files
         self.word_file = os.path.join(self.cwd, 'new_words.pickle')
@@ -129,128 +125,153 @@ class Game():
 
 
 #############################
-    # Init Functions
+    # Functions with main
 #############################
 
-    def init(self):
-        self.playing = 1
-        self.current_word = self.start
-        self.current_node = self.start_node
-        self.full_stack = []
-        self.word_stack = []
-        self.node_list = []
-        self.invalid_guesses = []
-        self.guesses = 0
-        self.message = ''
-        self.valid_guess = 1
-        self.starting_stack()
-        return
-
     def starting_stack(self):
-        
-        self.node_list.append(self.words[self.start]['node'])
-        self.full_stack = []
+        full_stack = {}
         for i in range(0, self.shortest_path):
-            d = {}
             if i == 0:
                 # start
-                d['word'] = self.start
-                d['def'] = self.words[self.start]['definition']
-                d['paths'] = len(self.paths)
+                full_stack['start'] = {}
+                full_stack['start']['word'] = self.start
+                full_stack['start']['def'] = self.words[self.start]['definition']
+                full_stack['start']['paths'] = len(self.paths)
 
             elif i == self.shortest_path -1:
                 # end
-                d['word'] = self.end
-                d['def'] = self.words[self.end]['definition']
-                d['paths'] = 1
+                full_stack['end'] = {}
+                full_stack['end']['word'] = self.end
+                full_stack['end']['def'] = self.words[self.end]['definition']
+                full_stack['end']['paths'] = 1
 
             else:
-                d['word'] = '...'
-                d['paths'] = '??'
-            self.full_stack.append(d)
-        return
+                full_stack[i] = {}
+                full_stack[i]['word'] = '...'
+                full_stack[i]['def'] = ''
+                full_stack[i]['paths'] = '??'
+
+        return full_stack
 
     def give_up(self):
-        self.full_stack = []
-        self.word_stack = []
-        self.node_list = []
+        # Returns valid guess, message, full_stack
+        full_stack = {}
+        node_list = []
         for i, num in enumerate(self.paths[0]):
+            if i == 0:
+                stack_n = 'start'
+            elif i == len(self.paths[0])-1:
+                stack_n = 'end'
+            else:
+                stack_n = i
             word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
-            self.node_list.append(num)
-            self.current_node = self.words[word]['node']
-            self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
-            self.full_stack.append({'word':word, 'paths': len(self.current_word_paths), 'def': self.words[word]['definition']})
-        return
+            node_list.append(num)
+            current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
+            definition = self.words[word]['definition']
+
+            full_stack[stack_n] = {}
+            full_stack[stack_n]['word'] = word
+            full_stack[stack_n]['def'] = definition
+            full_stack[stack_n]['paths'] = len(current_word_paths)
+        return 2, 'This is one possible shortest path', full_stack
     
 #############################
     # Checking guess
 #############################
 
-    def check_guess(self, guess):
-        self.valid_guess = 1
-        self.guess = guess
-        self.guesses+=1
+    def check_guess(self, guess, full_stack):
+        # Returns valid guess, message, full_stack
 
         # check if 5 letters
-        self.check_is_5()
+        valid_guess, message = self.check_is_5(guess)
 
         # check if word
-        if self.valid_guess:
-            self.check_is_word()
+        if valid_guess:
+            valid_guess, message = self.check_is_word(guess)
 
-        # Check if only chaning 1 letter
-        if self.valid_guess:
-            self.check_change()
+        # Check if only changing 1 letter
+        if valid_guess:
+            valid_guess, message = self.check_change(guess, full_stack)
 
-        if self.valid_guess:
-            self.check_end()
-        return
+        # Is truly a valid guess now
+        if valid_guess:
+            full_stack = self.update_stack(guess, full_stack)
+            valid_guess, message, full_stack = self.check_end(guess)
+        return valid_guess, message, full_stack
 
-    def check_is_5(self):
-        self.is_5 = len(self.guess)==5
-        if not self.is_5:
-            self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" is not 5 letters, try again'
-            self.valid_guess = 0
-        return
+    def check_is_5(self, guess):
+        valid_guess = 1
+        message = self.valid_message
+        is_5 = len(guess)==5
+        if not is_5:
+            message = f'"{guess}" is not 5 letters, try again'
+            valid_guess = 0
+        return valid_guess, message
 
-    def check_is_word(self):
-        self.is_word = self.guess in self.word_list
-        if not self.is_word:
-            self.invalid_guesses.append(self.guess)
-            self.message = f'"{self.guess}" not found in dictionary, try again.'
-            self.valid_guess = 0
-        return
+    def check_is_word(self, guess):
+        valid_guess = 1
+        message = self.valid_message
+        is_word = guess in self.word_list
+        if not is_word:
+            message = f'"{guess}" not found in dictionary, try again.'
+            valid_guess = 0
+        return valid_guess, message
 
-    def check_end(self):
-        if self.end == self.guess:
-            self.message='You win!'
-            self.playing = 0
-            self.full_stack[len(self.word_stack)]['word'] = self.current_word
-            self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
+    def check_end(self, guess):
+        if self.end == guess:
+            message='You win!'
+            valid_guess = 2
         else:
-            # it is a valid guess but is not done
-            self.message = 'Valid input!'
-            self.current_word = self.guess
-            self.word_stack.append(self.guess)
+            message = self.valid_message
+            valid_guess = 1
+        return valid_guess, message
 
-            # Find how many paths remain
-            self.current_node = self.words[self.current_word]['node']
-            self.node_list.append(self.current_node)
-            self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
+    def check_change(self, guess, full_stack):
+        valid_guess = 1
+        message = self.valid_message
+        key = self.latest_word(full_stack)
+        last_word = full_stack[key]['word']
+        current_counter = Counter(last_word)
+        guess_counter = Counter(guess)
+        shared_letters = sum((current_counter & guess_counter).values())
+        if shared_letters != 4:
+            message =f'"{guess}" does not change only a single letter from "{last_word}", try again.'
+            valid_guess = 0
+        return valid_guess, message
 
-            self.full_stack[len(self.word_stack)]['word'] = self.current_word
-            self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-            self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
-        return
 
-    def check_change(self):
-        self.current_counter = Counter(self.current_word)
-        self.guess_counter = Counter(self.guess)
-        self.shared_letters = sum((self.current_counter & self.guess_counter).values())
-        if self.shared_letters != 4:
-            self.invalid_guesses.append(self.guess)
-            self.message =f'"{self.guess}" does not change only a single letter from "{self.current_word}", try again'
-            self.valid_guess = 0
-        return
+#####################################
+# Extracting the last word from full starting_stack
+########################################
+    
+    def latest_word(self, full_stack):
+        temp = []
+        for key in full_stack.keys():
+            if key in ['start', 'end']:
+                continue
+            
+            if full_stack[key]['word'] == '...':
+                continue
+            else:
+                temp.append(key)
+        
+        return max(temp)
+    
+    def update_stack(self, guess, full_stack):
+        last_key = self.latest_word(full_stack)
+        stack_n = last_key+1
 
+        node_list = []
+        node_list.append(self.words[self.start_node])
+        for key in full_stack.keys():
+            if key in ['start', 'end'] or full_stack[key]['word'] == '...':
+                continue
+            word = full_stack[key]['word']
+            node_list.append(self.words[word]['node'])
+        current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
+
+        full_stack[stack_n] = {}
+        full_stack[stack_n]['word'] = guess
+        full_stack[stack_n]['def'] = self.words[self.current_word]['definition']
+        full_stack[stack_n]['paths'] = len(current_word_paths)
+        return full_stack

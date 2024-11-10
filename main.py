@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for 
+from flask import Flask, render_template, request, session
 import collections
 collections.MutableMapping = collections.abc.MutableMapping
 collections.MutableSequence = collections.abc.MutableSequence
@@ -6,12 +6,22 @@ collections.Iterable = collections.abc.Iterable
 from flask_navigation import Navigation 
 from game import Game
 
-class Test:
-    def __init__(self):
-        self.message = 'Hello'
-        self.user_input = False
+
+# This is the variable that will be sent to the index.html
+# and saved as a session
+class state_intermediate:
+    def __init__(self, game):
+        self.valid_guess = 1
+        self.message = ""
+        self.full_stack = game.starting_stack()
+        return
+
+# initialize game object
+game = Game()
 
 
+
+# Flask startups
 app = Flask(__name__)
 app.secret_key = "meowmeowmeow"
 nav = Navigation(app)
@@ -21,10 +31,8 @@ nav.Bar('top', [
 ]) 
 
 
-game = Game()
-game.init()
-
-
+# Session will have:
+# user, state_intermediate
 @app.route('/', methods = ['GET', 'POST'])
 def Play():
     
@@ -32,20 +40,20 @@ def Play():
         if request.method != 'POST':
             None
         elif request.form['guess'] == '...':
-            game.init()
+            session.clear()
         elif request.form['guess'] == 'give up':
-            game.give_up()
-            session.pop('user')
+            session['state'].valid_guess, session['state'].message, session['state'].full_stack = game.give_up()
         else:
             # Guessing
-            game.check_guess(request.form['guess'].lower())
-            if game.playing == 0:
-                session.pop('user')
-        return render_template('index.html', game=game)
+            session['state'].valid_guess, session['state'].message, session['state'].full_stack = \
+                game.check_guess(request.form['guess'], session['state'].full_stack)
+
+        return render_template('index.html', game=session['state'])
 
     else:
         session['user'] = request.remote_addr
-        return render_template('index.html', game=game)
+        session['state'] = state_intermediate(game).__dict__
+        return render_template('index.html', game=session['state'])
 
     
 

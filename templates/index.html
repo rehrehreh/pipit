@@ -121,9 +121,6 @@
     {% if game.message != '' %}
     <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
     {% endif %}
-    {% if game.score %}
-    <p>Score: {{ game.score }}</p>
-    {% endif %}
 </body>
 
 </html>
