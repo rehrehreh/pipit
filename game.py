@@ -18,21 +18,41 @@ class Game():
     def __init__(self):
         self.cwd = os.getcwd()
         self.node_list = []
-        # Get words
+        self.start_up()
+        self.config_startup()
+
+
+        
+        
+
+    def start_up(self):
+        # This function sets the paths of initial files
         self.word_file = os.path.join(self.cwd, 'new_words.pickle')
         self.paths_file = os.path.join(self.cwd, 'paths.pickle')
         self.config_file = os.path.join(self.cwd, 'config.json')
 
         with open(self.word_file, 'rb') as handle:
             self.words = pickle.load(handle)
+
         self.word_list = list(self.words.keys())
         self.word_length = len(self.word_list)
+        return
 
+#############################
+    # Config Functions
+#############################
+
+    def config_startup(self):
+        # This function will pull / save the daily config (paths, start, end)
+        # IF the seed matches that in the config, it loads
+        # IF it does not, it will set a new config
+        
         self.config_dict = {}
         self.today =  datetime.date.today()
         self.seed = 10000*self.today.year + 100*self.today.month + self.today.day
         self.config_dict['seed'] = self.seed
-        random.seed(self.seed)
+        random.seed(self.seed) 
+
         if not self.check_config():
             self.start_num = int(random.random() * self.word_length)
             self.start = self.word_list[self.start_num]
@@ -42,10 +62,7 @@ class Game():
             self.export_config()
         else:
             self.load_config()
-
-        # Set init values
-        self.local = 1
-        
+        return
 
     def check_config(self):
         equivalent = 0
@@ -58,6 +75,42 @@ class Game():
             print('No config loaded, generating config')
         return equivalent
 
+    def make_graph(self):
+        connection_file = os.path.join(self.cwd, 'connections.pickle')
+        with open(connection_file, 'rb') as handle:
+            self.connections = pickle.load(handle)
+        self.G = nx.Graph()
+        self.G.add_nodes_from(self.words.keys(), label = self.words.values())
+        self.G.add_edges_from(self.connections)
+        return
+
+    def get_end(self):
+        need_end = 1
+        while need_end:
+            self.end_num = int(random.random() * self.word_length)
+            self.end = self.word_list[self.end_num]
+            self.end_counter = Counter(self.end)
+            self.starting_difference = 5 - sum((self.start_counter & self.end_counter).values())
+            if self.starting_difference in [4, 5]:
+                paths_exist = self.generate_paths()
+                print(f'possible game: {self.start} ->{self.end}')
+                print(f'paths: {len(self.paths)}')
+                if paths_exist > 0:
+                    need_end = 0
+        return
+
+    def generate_paths(self):
+        self.start_node = self.words[self.start]['node']
+        self.end_node = self.words[self.end]['node']
+        self.shortest_path_path = nx.shortest_path(self.G, self.start_node, self.end_node)
+        self.shortest_path = len(self.shortest_path_path)
+        if type(self.shortest_path) == 0:
+            return 0
+        print('findingpaths')
+        self.paths = list(nx.all_shortest_paths(self.G, self.start_node, self.end_node))
+        with open(self.paths_file, 'wb') as handle:
+            pickle.dump(self.paths, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        return len(self.paths)
 
     def load_config(self):
         with open(self.config_file, "r") as f:
@@ -77,10 +130,25 @@ class Game():
             json.dump(self.config_dict, f, indent=4)
         return
 
-    def starting_stack(self):
-        # empyt dict
-        # fill dict with word stack
+
+#############################
+    # Init Functions
+#############################
+
+    def init(self):
+        self.playing = 1
+        self.current_word = self.start
         self.node_list = []
+        self.word_stack = []
+        self.invalid_guesses = []
+        self.guesses = 0
+        self.message = ''
+        self.valid_guess = 1
+        self.starting_stack()
+        return
+
+    def starting_stack(self):
+        
         self.node_list.append(self.words[self.start]['node'])
         self.full_stack = []
         for i in range(0, self.shortest_path):
@@ -103,23 +171,6 @@ class Game():
             self.full_stack.append(d)
         return
 
-    def init(self):
-        self.start_time = time.perf_counter()
-        self.playing = 1
-        self.current_word = self.start
-        self.word_stack = []
-        self.invalid_guesses = []
-        self.guesses = 0
-        self.message = ''
-        self.valid_guess = 1
-        self.starting_stack()
-        self.word_score = False
-        self.invalid_penalty = False
-        self.time_score = False
-        self.score = False
-        return
-
-
     def give_up(self):
         self.full_stack = []
         self.node_list = []
@@ -130,66 +181,29 @@ class Game():
             self.current_word_paths = [x for x in self.paths if x[0:len(self.node_list)] == self.node_list]
             self.full_stack.append({'word':word, 'paths': len(self.current_word_paths), 'def': self.words[word]['definition']})
         return
-
-
-    def make_graph(self):
-        connection_file = os.path.join(self.cwd, 'connections.pickle')
-        with open(connection_file, 'rb') as handle:
-            self.connections = pickle.load(handle)
-        self.G = nx.Graph()
-        self.G.add_nodes_from(self.words.keys(), label = self.words.values())
-        self.G.add_edges_from(self.connections)
-        return
     
-    def generate_paths(self):
-        self.start_node = self.words[self.start]['node']
-        self.end_node = self.words[self.end]['node']
-        self.shortest_path_path = nx.shortest_path(self.G, self.start_node, self.end_node)
-        self.shortest_path = len(self.shortest_path_path)
-        if type(self.shortest_path) == 0:
-            return 0
-        print('findingpaths')
-        self.paths = list(nx.all_shortest_paths(self.G, self.start_node, self.end_node))
-        with open(self.paths_file, 'wb') as handle:
-            pickle.dump(self.paths, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        return len(self.paths)
+#############################
+    # Checking guess
+#############################
 
-    def get_end(self):
-        need_end = 1
-        while need_end:
-            self.end_num = int(random.random() * self.word_length)
-            self.end = self.word_list[self.end_num]
-            self.end_counter = Counter(self.end)
-            self.starting_difference = 5 - sum((self.start_counter & self.end_counter).values())
-            if self.starting_difference in [4, 5]:
-                paths_exist = self.generate_paths()
-                print(f'possible game: {self.start} ->{self.end}')
-                print(f'paths: {len(self.paths)}')
-                if paths_exist > 0:
-                    need_end = 0
-        return
+    def check_guess(self, guess):
+        self.valid_guess = 1
+        self.guess = guess
+        self.guesses+=1
 
-    def get_score(self):
-        self.word_score = round(1-(len(self.word_stack) - self.starting_difference)/8, 3)
-        self.invalid_penalty = -0.07 * len(self.invalid_guesses)
-        self.time_score = round(1 - (self.total_time)/600, 3)
-        self.score = round(self.word_score + self.invalid_penalty + self.time_score, 3)
-        return
+        # check if 5 letters
+        self.check_is_5()
 
+        # check if word
+        if self.valid_guess:
+            self.check_is_word()
 
-    def print_metrics(self):
-        if self.local:
-            print('-----------------------------------------')
-            print(self.message)
-            print(f'Words between: {len(self.word_stack)}')
-            print(f'Invalid inputs: {len(self.invalid_guesses)}')
-            print(f'Total tries: {self.guesses}\n')
-            if not self.playing:
-                print(f'Total Time: {self.total_time}')
-                print(f'Total Score: {self.score}')
-                print(f'Word Score: {self.word_score}')
-                print(f'Timing Score: {self.time_score}')
-                print(f'Invalid Penalties: {self.invalid_penalty}')
+        # Check if only chaning 1 letter
+        if self.valid_guess:
+            self.check_change()
+
+        if self.valid_guess:
+            self.check_end()
         return
 
     def check_is_5(self):
@@ -199,7 +213,6 @@ class Game():
             self.message = f'"{self.guess}" is not 5 letters, try again'
             self.valid_guess = 0
         return
-
 
     def check_is_word(self):
         self.is_word = self.guess in self.word_list
@@ -215,8 +228,6 @@ class Game():
             self.playing = 0
             self.full_stack[len(self.word_stack)]['word'] = self.current_word
             self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
-            self.end_time = time.perf_counter()
-            self.total_time = round(self.end_time - self.start_time, 1)
         else:
             # it is a valid guess but is not done
             self.message = 'Valid input!'
@@ -231,13 +242,7 @@ class Game():
             self.full_stack[len(self.word_stack)]['word'] = self.current_word
             self.full_stack[len(self.word_stack)]['paths'] = len(self.current_word_paths)
             self.full_stack[len(self.word_stack)]['def'] = self.words[self.current_word]['definition']
-            # update full stack
-            # if len(self.word_stack) > (len(self.full_stack) - 3):
-            #     self.full_stack[len(self.word_stack)+1]= {'word': '...', 'paths':'??'}
-            #     self.full_stack.append({'word':self.end, 'paths':1})
         return
-
-
 
     def check_change(self):
         self.current_counter = Counter(self.current_word)
@@ -249,40 +254,3 @@ class Game():
             self.valid_guess = 0
         return
 
-    def play_local(self):
-        
-        self.init()
-        while self.playing:  
-            self.valid_guess = 1
-            self.print_metrics()
-
-            self.guess = input('Next Word: ').lower()
-            if self.guess == 'give up':
-                self.give_up()
-                self.playing = 0
-            print(self.guess)
-            self.guesses+=1
-
-            # check if word
-            self.check_is_word()
-            if not self.valid_guess:
-                continue
-            
-            # Check if only chaning 1 letter
-            self.check_change()
-            if not self.valid_guess:
-                continue
-            
-            # Check if equal to end
-            self.check_end()
-            if self.playing == 0:
-                self.get_score()
-                self.print_metrics()
-                self.print_stack()
-        return
-
-
-
-if __name__ == "__main__":
-    game = Game()
-    game.play_local()

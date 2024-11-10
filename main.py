@@ -35,29 +35,9 @@ def Play():
     elif request.form['guess'] == 'give up':
         game.give_up()
     else:
-        game.valid_guess = 1
-        game.guess = request.form['guess'].lower()
-        game.guesses+=1
+        # Guessing
+        game.check_guess(request.form['guess'].lower())        
 
-        # check if 5 letters
-        game.check_is_5()
-
-        # check if word
-        if game.valid_guess:
-            game.check_is_word()
-
-        # Check if only chaning 1 letter
-        if game.valid_guess:
-            game.check_change()
-
-                
-        if game.valid_guess:
-            game.check_end()
-            if game.playing == 0:
-                game.get_score()
-
-
-            # Process the user input here (e.g., store it in a database, perform calculations)
     return render_template('index.html', game=game)
 
 
