@@ -242,14 +242,13 @@ class Game():
     def latest_word(self, full_stack):
         temp = []
         for key in full_stack.keys():
-            key = int(key)
-            if key == 99:
+            if int(key) == 99:
                 continue
             
             if full_stack[key]['word'] == '...':
                 continue
             else:
-                temp.append(key)
+                temp.append(int(key))
         
         return max(temp)
     
@@ -260,7 +259,7 @@ class Game():
         node_list = []
         node_list.append(self.words[self.start_node])
         for key in full_stack.keys():
-            if full_stack[key]['word'] == '...' or key == 99:
+            if full_stack[key]['word'] == '...' or int(key) == 99:
                 continue
             word = full_stack[key]['word']
             node_list.append(self.words[word]['node'])
