@@ -268,4 +268,6 @@ class Game():
         full_stack[stack_n]['word'] = guess
         full_stack[stack_n]['def'] = self.words[guess]['definition']
         full_stack[stack_n]['paths'] = len(current_word_paths)
+
+        full_stack = dict(sorted(full_stack.items()))
         return full_stack
