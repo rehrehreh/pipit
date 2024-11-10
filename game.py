@@ -191,7 +191,7 @@ class Game():
         # Is truly a valid guess now
         if valid_guess:
             full_stack = self.update_stack(guess, full_stack)
-            valid_guess, message, full_stack = self.check_end(guess)
+            valid_guess, message = self.check_end(guess)
         return valid_guess, message, full_stack
 
     def check_is_5(self, guess):
