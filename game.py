@@ -225,7 +225,7 @@ class Game():
         valid_guess = 1
         message = self.valid_message
         key = self.latest_word(full_stack)
-        last_word = full_stack[key]['word']
+        last_word = full_stack[str(key)]['word']
         current_counter = Counter(last_word)
         guess_counter = Counter(guess)
         shared_letters = sum((current_counter & guess_counter).values())
