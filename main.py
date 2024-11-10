@@ -22,12 +22,11 @@ nav.Bar('top', [
 
 
 game = Game()
-game.local = 0
 game.init()
 
 @app.route('/')
 def start():
-    session['game'] = Game()
+    session['user'] = 'hello'
     return redirect(url_for('Play'))
 
 
@@ -38,13 +37,13 @@ def Play():
         if request.method != 'POST':
             None
         elif request.form['guess'] == '...':
-            session['game'].init()
+            game.init()
         elif request.form['guess'] == 'give up':
-            session['game'].give_up()
+            game.give_up()
         else:
             # Guessing
-            session['game'].check_guess(request.form['guess'].lower())     
-        return render_template('index.html', game=session['game'])
+            game.check_guess(request.form['guess'].lower())     
+        return render_template('index.html', game=game)
 
     else:
         return redirect(url_for('start'))
