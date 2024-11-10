@@ -7,19 +7,8 @@ from flask_navigation import Navigation
 from game import Game
 
 
-# This is the variable that will be sent to the index.html
-# and saved as a session
-class state_intermediate:
-    def __init__(self, game):
-        self.valid_guess = 1
-        self.message = ""
-        self.full_stack = game.starting_stack()
-        return
-
 # initialize game object
 game = Game()
-
-
 
 # Flask startups
 app = Flask(__name__)
@@ -39,23 +28,30 @@ def Play():
     if 'user' in session:
         if request.method != 'POST':
             None
+
         elif request.form['guess'] == '...':
             session.clear()
             session['user'] = request.remote_addr
-            session['state'] = state_intermediate(game).__dict__
+            session['full_stack'] = game.starting_stack()
+            session['valid_guess'] = 1
+            session['message'] = ''
+
         elif request.form['guess'] == 'give up':
-            session['state']['valid_guess'], session['state']['message'], session['state']['full_stack'] = game.give_up()
+            session['valid_guess'], session['message'], session['full_stack'] = game.give_up()
+
         else:
             # Guessing
-            session['state']['valid_guess'], session['state']['message'], session['state']['full_stack'] = \
-                game.check_guess(request.form['guess'], session['state']['full_stack'])
+            session['valid_guess'], session['message'], session['full_stack'] = \
+                game.check_guess(request.form['guess'], session['full_stack'])
 
-        return render_template('index.html', game=session['state'])
+        return render_template('index.html', full_stack=session['full_stack'], valid_guess = session['valid_guess'], message = session['message'])
 
     else:
         session['user'] = request.remote_addr
-        session['state'] = state_intermediate(game).__dict__
-        return render_template('index.html', game=session['state'])
+        session['full_stack'] = game.starting_stack()
+        session['valid_guess'] = 1
+        session['message'] = ''
+        return render_template('index.html', full_stack=session['full_stack'], valid_guess = session['valid_guess'], message = session['message'])
 
     
 

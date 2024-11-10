@@ -50,22 +50,22 @@
                 <th>
                     Paths
                 </th>
-            {% for stack in game.full_stack.keys() %}
+            {% for stack in full_stack.keys() %}
             {% set rowloop = loop %}
                 <tr>
                     {% for key in ['word', 'paths'] %}
                         {% if key == 'paths' %}
-                            {% if stack != 99 and stack !=0 and game.full_stack[stack]['paths'] != '??' %}
+                            {% if stack != 99 and stack !=0 and full_stack[stack]['paths'] != '??' %}
                                 <td>
-                                    <div class="flip" id="counter"> {{ game.full_stack[stack]['paths'] }}</div>
+                                    <div class="flip" id="counter"> {{ full_stack[stack]['paths'] }}</div>
                                 </td>
                             {% else %}
-                                <td class ="{{ key }}{% if game.full_stack[stack]['paths']==0 %} lost{% endif %}">{{ game.full_stack[stack]['paths'] }}</td>
+                                <td class ="{{ key }}{% if full_stack[stack]['paths']==0 %} lost{% endif %}">{{ full_stack[stack]['paths'] }}</td>
                             {% endif %}
                         {% else %}
-                            <td class ="{{ key }}{% if game.full_stack[stack]['paths']==0 %} lost{% endif %}" id="{{ 'popup_' ~ rowloop.index0 }}">{{ game.full_stack[stack][key] }}
-                            {% if game.full_stack[stack]['def'] != '' %}
-                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ game.full_stack[stack]['def'] }}</div>
+                            <td class ="{{ key }}{% if full_stack[stack]['paths']==0 %} lost{% endif %}" id="{{ 'popup_' ~ rowloop.index0 }}">{{ full_stack[stack][key] }}
+                            {% if full_stack[stack]['def'] != '' %}
+                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ full_stack[stack]['def'] }}</div>
                             <script>
                                 document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseenter',
                                     () => {
@@ -91,8 +91,8 @@
             flipElement.style.setProperty('--num', initialValue);
         </script>
     </div>
-    {% if game.message != '' %}
-    <p class="{% if not game.valid_guess %}error{% endif %}">{{ game.message }}</p>
+    {% if message != '' %}
+    <p class="{% if not valid_guess %}error{% endif %}">{{ message }}</p>
     {% endif %}
 </body>
 
