@@ -42,10 +42,10 @@ def Play():
         elif request.form['guess'] == '...':
             session.clear()
         elif request.form['guess'] == 'give up':
-            session['state'].valid_guess, session['state'].message, session['state'].full_stack = game.give_up()
+            session['state']['valid_guess'], session['state']['message'], session['state']['full_stack'] = game.give_up()
         else:
             # Guessing
-            session['state'].valid_guess, session['state'].message, session['state'].full_stack = \
+            session['state']['valid_guess'], session['state']['message'], session['state']['full_stack'] = \
                 game.check_guess(request.form['guess'], session['state']['full_stack'])
 
         return render_template('index.html', game=session['state'])
