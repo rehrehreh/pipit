@@ -92,7 +92,7 @@
                         {% else %}
                             <td class ="{{ key }}{% if word['paths']==0 %} lost{% endif %}" id="{{ 'popup_' ~ rowloop.index0 }}">{{ word[key] }}
                             {% if 'def' in word.keys() %}
-                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ game.full_stack }}</div>
+                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ game.full_stack.keys() }}</div>
                             <script>
                                 document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseenter',
                                     () => {

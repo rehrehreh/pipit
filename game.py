@@ -138,8 +138,9 @@ class Game():
     def init(self):
         self.playing = 1
         self.current_word = self.start
-        self.node_list = []
+        self.full_stack = []
         self.word_stack = []
+        self.node_list = []
         self.invalid_guesses = []
         self.guesses = 0
         self.message = ''
@@ -173,6 +174,7 @@ class Game():
 
     def give_up(self):
         self.full_stack = []
+        self.word_stack = []
         self.node_list = []
         for i, num in enumerate(self.paths[0]):
             word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
