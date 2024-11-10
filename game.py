@@ -257,7 +257,6 @@ class Game():
         stack_n = last_key+1
 
         node_list = []
-        node_list.append(self.words[self.start_node])
         for key in full_stack.keys():
             if full_stack[key]['word'] == '...' or int(key) == 99:
                 continue
