@@ -55,7 +55,7 @@
                 <tr>
                     {% for key in ['word', 'paths'] %}
                         {% if key == 'paths' %}
-                            {% if not rowloop.last and not rowloop.first and stack['paths'] != '??' and game.full_stack[rowloop.index0 + 1]['paths'] == '??' %}
+                            {% if not rowloop.last and not rowloop.first and stack['paths'] != '??' and game.full_stack[rowloop.index1]['paths'] == '??' %}
                                 <td>
                                     <div class="flip" id="counter"> {{ stack['paths'] }}</div>
                                 <script>
