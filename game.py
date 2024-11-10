@@ -254,7 +254,7 @@ class Game():
     
     def update_stack(self, guess, full_stack):
         last_key = self.latest_word(full_stack)
-        stack_n = last_key+1
+        stack_n = int(last_key+1)
 
         node_list = []
         for key in full_stack.keys():
@@ -269,5 +269,6 @@ class Game():
         full_stack[stack_n]['def'] = self.words[guess]['definition']
         full_stack[stack_n]['paths'] = len(current_word_paths)
 
+        print(full_stack)
         full_stack = dict(sorted(full_stack.items()))
         return full_stack
