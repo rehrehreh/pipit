@@ -31,22 +31,24 @@ def Play():
 
         elif request.form['guess'] == '...':
             session.clear()
+            game = Game()
             session['user'] = request.remote_addr
             session['full_stack'] = game.starting_stack()
             session['valid_guess'] = 1
             session['message'] = ''
 
-        elif request.form['guess'] == 'give up':
+        elif request.form['guess'].lower() == 'give up':
             session['valid_guess'], session['message'], session['full_stack'] = game.give_up()
 
         else:
             # Guessing
             session['valid_guess'], session['message'], session['full_stack'] = \
-                game.check_guess(request.form['guess'], session['full_stack'])
+                game.check_guess(request.form['guess'].lower(), session['full_stack'])
 
         return render_template('index.html', full_stack=session['full_stack'], valid_guess = session['valid_guess'], message = session['message'])
 
     else:
+        game = Game()
         session['user'] = request.remote_addr
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 1
