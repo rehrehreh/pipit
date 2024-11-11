@@ -129,6 +129,8 @@ class Game():
 #############################
 
     def starting_stack(self):
+        self.start_up()
+        self.config_startup()
         full_stack = {}
         for i in range(0, self.shortest_path):
             if i == 0:
