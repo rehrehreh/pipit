@@ -28,7 +28,7 @@
         <h1> Pipit
         <img src="{{ url_for('static', filename='pipit_2.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left; position:relative">
         </h1>
-        <ul> 
+        <ul class="navi"> 
             {% for item in nav.top %} 
             <li class="{{ 'active' if item.is_active else '' }}"> 
                 <a href="{{ url_for(item.label) }}">{{ item.label }}</a> 
@@ -38,13 +38,13 @@
     </nav>
     <main> 
         <p>Pipit was ideated by Matthew Rehberg and Keri Callegari. Pipit is a word latter game that has the following rules: </p>
-            <ul>
+            <ul class="rules-ul">
                 <li>The next word in the latter must change only 1 letter from the previous word.</li> 
                 <li>The absolute position of the letters in the next word can change from the previous word.</li>
                 <li>The next word must be one of the 6610 words recognized in the English language.</li>
             </ul>
             <p>Word ladders have been around for a while so the idea of this game is not new. However, the mathematics of word ladders have been out of computational reach until recent. It is these mathematics of Pipit that fascinated Keri and Matt. </p> 
-            <ul>
+            <ul class="about-ul">
                 <li>There are 11,881,376 possible combinations of 5 letters.</li> 
                 <li>Of those combinations, there are 6610 words recognized in the english language (0.0556%).</li>
                 <li>Of the 6610 words, there are only 17 words are not connected to other words by 4/5 letters - meaning that they are not feasible options for a word ladder.</li>

@@ -28,13 +28,12 @@
     <h1> Pipit
     <img src="{{ url_for('static', filename='pipit_2.jpg') }}" alt="My Image" width="45" height="45" style="border-radius: 50%; float:left; position:relative">
     </h1>
-    <ul> 
+    <ul class="navi"> 
         {% for item in nav.top %} 
         <li class="{{ 'active' if item.is_active else '' }}"> 
             <a href="{{ url_for(item.label) }}">{{ item.label }}</a> 
         </li> 
         {% endfor %} 
-    </ul> 
     </nav>
     <form action="/" method="post">
         <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()" spellcheck="false" autocomplete="off" autocorrect=""off>

@@ -138,25 +138,55 @@ input[type="text"]::placeholder {
 }
 
 
-
-ul {
-    list-style-type: none;
+.rules-ul {
+    list-style-type: lower-roman;
+    list-style-position: inside;
     margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--background-color);
+    display: inline-block;
+}
+
+.rules-ul li {
+    float:left;
+    display: block;
+    margin-left: 10%;
+}
+
+.about-ul {
+    list-style-type: disc;
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--background-color);
+    display: block;
+}
+
+.about-ul li {
+    float:left;
+    margin-left: 10%;
+    display: block;
+}
+
+.navi {
+    list-style-type: none;    margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: var(--background-color);
 }
 
-li {
+.navi li {
     float: right;
     background-color: var(--background-color)
 }
 
-li:last-child {
+.navi li:last-child {
     border-left: none;
 }
 
-li a {
+.navi li a {
     display: block;
     color: var(--primary-border);
     text-align: center;
@@ -169,7 +199,7 @@ li a {
 }
 
 
-li a:hover {
+.navi li a:hover {
     background-color: var(--primary-color);
 }
 
