@@ -36,8 +36,10 @@ h1 {
 
 p {
     text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
     font-size: 20px;
-    font-family: Arial, sans-serif;
+    font-family: cursive;
 }
 
 p.error {
@@ -139,35 +141,47 @@ input[type="text"]::placeholder {
 
 
 .rules-ul {
-    list-style-type: lower-roman;
-    list-style-position: inside;
+    list-style-type: none;
+    list-style-position: outside;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow:auto;
     background-color: var(--background-color);
-    display: inline-block;
+    text-align: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .rules-ul li {
-    float:left;
-    display: block;
+    width: 80%;
     margin-left: 10%;
+    margin-right: 10%;
+}
+
+.rules-ul li::before{
+    content: "\2705" ;
 }
 
 .about-ul {
-    list-style-type: disc;
-    list-style-position: inside;
+    list-style-type: none;
+    list-style-position: outside;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
     background-color: var(--background-color);
-    display: block;
+    text-align: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .about-ul li {
-    float:left;
+    width: 80%;
     margin-left: 10%;
-    display: block;
+    margin-right: 10%;
+}
+
+.about-ul li::before {
+    content: "\1F426";
 }
 
 .navi {
@@ -238,3 +252,7 @@ nav {
     font-family: 'Courier New', Courier, monospace;
 }
 
+.p-def {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+}
