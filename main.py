@@ -37,7 +37,7 @@ def Play():
             session['message'] = ''
 
         elif request.form['guess'].lower() == 'give up':
-            session['valid_guess'], session['message'], session['full_stack'] = game.give_up()
+            session['valid_guess'], session['message'], session['full_stack'] = game.give_up(full_stack = session['full_stack'])
 
         else:
             # Guessing

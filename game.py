@@ -50,7 +50,7 @@ class Game():
         random.seed(self.seed) 
 
         if not self.check_config():
-            self.start_num = int(random.random() * self.word_length)
+            self.start_num = int(random.random() * (self.word_length-1))
             self.start = self.word_list[self.start_num]
             self.start_counter = Counter(self.start)
             self.make_graph()
@@ -83,7 +83,7 @@ class Game():
     def get_end(self):
         need_end = 1
         while need_end:
-            self.end_num = int(random.random() * self.word_length)
+            self.end_num = int(random.random() * (self.word_length-1))
             self.end = self.word_list[self.end_num]
             self.end_counter = Counter(self.end)
             self.starting_difference = 5 - sum((self.start_counter & self.end_counter).values())
@@ -156,11 +156,31 @@ class Game():
 
         return full_stack
 
-    def give_up(self):
+    def give_up(self, full_stack):
+        random.seed(time.time() * 1000)
+        # Node list for determining current paths
+        node_list = []
+        for key in full_stack.keys():
+            if full_stack[key]['word'] == '...' or int(key) == 99:
+                continue
+            word = full_stack[key]['word']
+            node_list.append(self.words[word]['node'])
+        
+        # check if there are any possible paths given the current stack
+        current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
+        if len(current_word_paths)>0:
+            use_num = int(random.random() * (len(current_word_paths)-1))
+            use_path = current_word_paths[use_num]
+
+        else:
+            # use a random path because the current set cannot be filled in
+            use_num = int(random.random() * (len(self.paths)-1))
+            use_path = self.paths[use_num]
+
         # Returns valid guess, message, full_stack
         full_stack = {}
         node_list = []
-        for i, num in enumerate(self.paths[0]):
+        for i, num in enumerate(use_path):
             word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
             node_list.append(num)
             current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
@@ -190,10 +210,10 @@ class Game():
         if valid_guess:
             valid_guess, message = self.check_change(guess, full_stack)
 
-        # Is truly a valid guess now
+        # Update Stack
         if valid_guess:
             full_stack = self.update_stack(guess, full_stack)
-            valid_guess, message = self.check_end(guess)
+        
         return valid_guess, message, full_stack
 
     def check_is_5(self, guess):
@@ -214,14 +234,6 @@ class Game():
             valid_guess = 0
         return valid_guess, message
 
-    def check_end(self, guess):
-        if self.end == guess:
-            message='You win!'
-            valid_guess = 2
-        else:
-            message = self.valid_message
-            valid_guess = 1
-        return valid_guess, message
 
     def check_change(self, guess, full_stack):
         valid_guess = 1
@@ -230,10 +242,15 @@ class Game():
         last_word = full_stack[str(key)]['word']
         current_counter = Counter(last_word)
         guess_counter = Counter(guess)
+        end_counter = Counter(full_stack[str(99)]['word'])
         shared_letters = sum((current_counter & guess_counter).values())
+        shared_letters_end = sum((guess_counter & end_counter).values())
         if shared_letters != 4:
-            message =f'"{guess}" does not change only a single letter from "{last_word}", try again.'
+            message = f'"{guess}" does not change only a single letter from "{last_word}", try again.'
             valid_guess = 0
+        if shared_letters_end == 4:
+            message = 'You win!'
+            valid_guess = 2
         return valid_guess, message
 
 
