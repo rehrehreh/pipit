@@ -287,8 +287,10 @@ nav {
 #popup {
     display: none; /* Initially hidden */
     position: fixed;
-    top: 50%;
-    left: 50%;
+    margin-top: 20%;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
     transform: translate(-50%, -50%);
     background-color: #86b17d;
     border: 1px solid #1c1a1a;
