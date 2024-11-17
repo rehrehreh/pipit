@@ -19,7 +19,7 @@
     --width-path: 20vw;
   }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-device-width: 1024px) {
     :root{
     --font-large: 34px;
     --font-medium: 28px;
