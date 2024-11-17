@@ -13,6 +13,8 @@
     --font-medium: 5vw;
     --font-small: 4vw;
     --font-xsmall: 3vw;
+    --padding-standard: 2vw;
+    --padding-header: 3vw;
   }
 
 @media only screen and (min-width: 768px) {
@@ -21,6 +23,8 @@
     --font-medium: 28px;
     --font-small: 20px;
     --font-xsmall: 18px;
+    --padding-standard: 10px;
+    --padding-header: 12px;
     }
 }
 
@@ -71,7 +75,7 @@ table {
 th {
     border: var(--border);
     color: var(--secondary-text);
-    padding: 3vw;
+    padding: var(--padding-header);
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
@@ -83,7 +87,7 @@ th {
 
 td {
     border: var(--border);
-    padding: 2vw;
+    padding: var(--padding-standard);
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
@@ -138,7 +142,7 @@ input[type="text"] {
     font-size: var(--font-medium);
     text-align: center;
     font-family: Arial, sans-serif;
-    padding: 1vw;
+    padding: var(--padding-standard);
     border: var(--border);
     border-radius: 3px;
     cursor: pointer;
