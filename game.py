@@ -13,6 +13,7 @@ import pickle
 import datetime
 import networkx as nx
 import json
+from zoneinfo import ZoneInfo
 
 class Game():
     def __init__(self):
@@ -44,7 +45,7 @@ class Game():
         # IF it does not, it will set a new config
         
         self.config_dict = {}
-        self.today =  datetime.date.today()
+        self.today =  datetime.datetime.now(tz=ZoneInfo("America/New_York"))
         self.seed = 10000*self.today.year + 100*self.today.month + self.today.day
         self.config_dict['seed'] = self.seed
         random.seed(self.seed) 
