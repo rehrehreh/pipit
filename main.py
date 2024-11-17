@@ -5,7 +5,7 @@ collections.MutableSequence = collections.abc.MutableSequence
 collections.Iterable = collections.abc.Iterable
 from flask_navigation import Navigation 
 from game import Game
-
+from datetime import timedelta
 
 # initialize game object
 game = Game()
@@ -13,6 +13,7 @@ game = Game()
 # Flask startups
 app = Flask(__name__)
 app.secret_key = "meowmeowmeow"
+app.permanent_session_lifetime = timedelta(minutes = 120)
 nav = Navigation(app)
 nav.Bar('top', [ 
     nav.Item('Play', 'Play'),
@@ -31,6 +32,7 @@ def Play():
 
         elif request.form['guess'] == '...':
             session.clear()
+            session.permanent = True
             session['user'] = request.remote_addr
             session['full_stack'] = game.starting_stack()
             session['valid_guess'] = 1
@@ -47,6 +49,7 @@ def Play():
         return render_template('index.html', full_stack=session['full_stack'], valid_guess = session['valid_guess'], message = session['message'])
 
     else:
+        session.permanent = True
         session['user'] = request.remote_addr
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 1
