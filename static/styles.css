@@ -245,7 +245,7 @@ nav {
     position: absolute;
     bottom: 0;
     width: 80%;
-    height: 20%;
+    height: 40%;
     margin-top: 40%;
     margin-left: 10%;
     margin-right: 10%;
@@ -258,6 +258,7 @@ nav {
     font-family: 'Courier New', Courier, monospace;
     background-color: var(--background-color);
     font-size: var(--font-xsmall);
+    text-transform: lowercase;
 }
 
 .p-def {
