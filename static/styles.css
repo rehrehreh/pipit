@@ -9,6 +9,9 @@
     --border: 3px solid var(--primary-border);
     --border-lost: 3px solid var(--lost-border);
     --background-color: #1a1919;
+    --font-large: 10vw;
+    --font-medium: 5vw;
+    --font-small: 2vw;
   }
 
 body {
@@ -26,7 +29,7 @@ html {
 
 h1 {
     text-align: left;
-    font-size: 36px;
+    font-size: var(--font-large);
     font-family: Arial, sans-serif;
     margin: 0;
     margin-left: 1%;
@@ -38,7 +41,7 @@ p {
     text-align: center;
     margin-left: 10%;
     margin-right: 10%;
-    font-size: 20px;
+    font-size: var(--font-small);
     font-family: 'Andale Mono', monospace;
 }
 
@@ -62,7 +65,7 @@ th {
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
-    font-size: 24px;
+    font-size: var(--font-medium);
     font-weight: bold;
     text-transform: uppercase;
     height: 50px;
@@ -75,7 +78,7 @@ td {
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
-    font-size: 24px;
+    font-size: var(--font-medium);
     font-weight: bold;
     text-transform: uppercase;
     height: 50px;
@@ -124,7 +127,7 @@ form {
 input[type="text"] {
     background-color: var(--primary-color);
     color: var(--primary-text);
-    font-size: 34px;
+    font-size: var(--font-large);
     text-align: center;
     font-family: Arial, sans-serif;
     padding: 10px 10px;
@@ -206,7 +209,7 @@ input[type="text"]::placeholder {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: var(--font-medium);
     font-family: Arial, sans-serif;
     font-weight: bold;
     text-transform: uppercase;
@@ -254,7 +257,7 @@ nav {
 
 .p-def {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 15px;
+    font-size: var(--font-small);
 }
 
 
@@ -274,6 +277,6 @@ nav {
 
 h2 {
     text-align: center;
-    font-size: 30px;
+    font-size: var(--font-large);
     font-family: 'Andale Mono', monospace;
 }
