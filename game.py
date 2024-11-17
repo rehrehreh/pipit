@@ -242,7 +242,7 @@ class Game():
         last_word = full_stack[str(key)]['word']
         current_counter = Counter(last_word)
         guess_counter = Counter(guess)
-        end_counter = Counter(full_stack[str(99)]['word'])
+        end_counter = Counter(self.end)
         shared_letters = sum((current_counter & guess_counter).values())
         shared_letters_end = sum((guess_counter & end_counter).values())
         if shared_letters != 4:
