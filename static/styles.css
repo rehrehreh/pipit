@@ -62,20 +62,19 @@ table {
 th {
     border: var(--border);
     color: var(--secondary-text);
-    padding: 1vw;
+    padding: 3vw;
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
     font-size: var(--font-medium);
     font-weight: bold;
     text-transform: uppercase;
-    height: 10vw;
 }
 
 
 td {
     border: var(--border);
-    padding: 1vw;
+    padding: 2vw;
     border-radius: 5px;
     text-align: center;
     font-family: Arial, sans-serif;
