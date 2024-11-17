@@ -287,7 +287,7 @@ nav {
 #popup {
     display: none; /* Initially hidden */
     position: fixed;
-    margin-top: 20%;
+    margin-top: 10%;
     align-items: center;
     margin-left: 10%;
     margin-right: 10%;
