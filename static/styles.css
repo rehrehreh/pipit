@@ -11,7 +11,8 @@
     --background-color: #1a1919;
     --font-large: 7vw;
     --font-medium: 5vw;
-    --font-small: 3vw;
+    --font-small: 4vw;
+    --font-xsmall: 2vw;
   }
 
 body {
@@ -256,6 +257,7 @@ nav {
     vertical-align: bottom;
     font-family: 'Courier New', Courier, monospace;
     background-color: var(--background-color);
+    font-size: var(--font-xsmall);
 }
 
 .p-def {
