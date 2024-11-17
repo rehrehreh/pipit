@@ -245,6 +245,7 @@ nav {
     position: absolute;
     bottom: 0;
     width: 80%;
+    max-height: max-content;
     margin-left: 10%;
     margin-right: 10%;
     display: flex;
