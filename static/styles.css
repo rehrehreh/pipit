@@ -288,7 +288,7 @@ nav {
     display: none; /* Initially hidden */
     position: fixed;
     top: 50%;
-    left: 25%;
+    left: 50%;
     transform: translate(-50%, -50%);
     background-color: #86b17d;
     border: 1px solid #1c1a1a;
@@ -301,6 +301,6 @@ nav {
 
 h2 {
     text-align: center;
-    font-size: var(--font-large);
+    font-size: var(--font-medium);
     font-family: 'Andale Mono', monospace;
 }
