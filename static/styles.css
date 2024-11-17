@@ -295,7 +295,8 @@ nav {
     padding: 10px;
     z-index: 9999;
     border-radius: 10px;
-    color: var(--background-color)
+    color: var(--background-color);
+    font-size: var(--font-small);
   }
 
 h2 {
