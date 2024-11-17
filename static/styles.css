@@ -15,6 +15,15 @@
     --font-xsmall: 3vw;
   }
 
+@media only screen and (min-width: 768px) {
+    :root{
+    --font-large: 34px;
+    --font-medium: 28px;
+    --font-small: 20px;
+    --font-xsmall: 18px;
+    }
+}
+
 body {
     background-color: var(--background-color);
     color: #fff;
@@ -247,7 +256,7 @@ nav {
     width: 80%;
     max-height: max-content;
     margin-left: 10%;
-    margin-top: 50vh;
+    margin-top: 45vh;
     margin-right: 10%;
     display: flex;
     opacity: 0.9;
