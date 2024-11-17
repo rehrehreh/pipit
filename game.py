@@ -285,10 +285,6 @@ class Game():
             word = full_stack[key]['word']
             node_list.append(self.words[word]['node'])
         current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
-
-
         full_stack[stack_n]['paths'] = len(current_word_paths)
-
-        print(node_list)
         full_stack = dict(sorted(full_stack.items()))
         return full_stack
