@@ -81,12 +81,12 @@ td {
     font-size: var(--font-medium);
     font-weight: bold;
     text-transform: uppercase;
-    height: 10vw;
+    height: 7.5vw;
     color: var(--primary-text);
 }
 
 td.word {
-    width: 50vw;
+    width: 30vw;
     background-color: var(--primary-color)
 }
 
@@ -97,7 +97,7 @@ td.word.lost {
 }
 
 td.paths {
-    width: 30vw;
+    width: 20vw;
     color: var(--secondary-text);
 }
 
@@ -153,6 +153,7 @@ input[type="text"]::placeholder {
     text-align: center;
     align-items: center;
     font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-small);
 }
 
 .rules-ul li {
@@ -175,6 +176,7 @@ input[type="text"]::placeholder {
     text-align: center;
     align-items: center;
     font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-small);
 }
 
 .about-ul li {
@@ -247,12 +249,13 @@ nav {
     margin-left: 10%;
     margin-right: 10%;
     display: flex;
-    opacity: 0.7;
+    opacity: 0.9;
     text-align: center;
     justify-content: center;
     align-items: center;
     vertical-align: bottom;
     font-family: 'Courier New', Courier, monospace;
+    background-color: var(--background-color);
 }
 
 .p-def {
