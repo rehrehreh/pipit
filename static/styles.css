@@ -288,7 +288,7 @@ nav {
     display: none; /* Initially hidden */
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 25%;
     transform: translate(-50%, -50%);
     background-color: #86b17d;
     border: 1px solid #1c1a1a;
@@ -296,7 +296,7 @@ nav {
     z-index: 9999;
     border-radius: 10px;
     color: var(--background-color);
-    font-size: var(--font-small);
+    font-size: var(--font-xsmall);
   }
 
 h2 {
