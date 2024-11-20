@@ -249,7 +249,7 @@ class Game():
         if shared_letters != 4:
             message = f'"{guess}" does not change only a single letter from "{last_word}", try again.'
             valid_guess = 0
-        if shared_letters_end == 4:
+        if shared_letters_end == 4 and valid_guess:
             message = 'You win!'
             valid_guess = 2
         return valid_guess, message
