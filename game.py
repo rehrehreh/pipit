@@ -191,7 +191,7 @@ class Game():
             full_stack[i]['word'] = word
             full_stack[i]['def'] = definition
             full_stack[i]['paths'] = len(current_word_paths)
-        return 2, 'This is one possible shortest path', full_stack
+        return 3, 'This is one possible shortest path', full_stack
     
 #############################
     # Checking guess

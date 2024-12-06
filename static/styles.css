@@ -67,7 +67,7 @@ p.error {
     color: red;
 }
 
-table {
+table.main {
     border-spacing: 5px 10px;
     display: flex;
     align-items: center;
@@ -75,6 +75,7 @@ table {
     vertical-align: center;
     table-layout: auto;
 }
+
 
 th {
     border: var(--border);
@@ -122,6 +123,45 @@ td.paths.lost {
     background-color: var(--lost) ;
     color: var(--lost-text);
     border: var(--border-lost);
+}
+
+table.metric {
+    border-spacing: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: center;
+    table-layout: auto;
+}
+
+td.metric0 {
+    background-color: #dd9f9f ;
+    color: var(--secondary-text);
+    border: var(--border-lost);
+}
+
+td.metric1 {
+    background-color: #9fb8dd ;
+    color: var(--secondary-text);
+    border: 3px solid  #5e48ad;
+}
+
+td.metric2 {
+    background-color: var(--primary-color);
+    color: var(--secondary-text);
+    border: var(--border);
+}
+
+td.metric3 {
+    background-color: #d4c16b ;
+    color: var(--secondary-text);
+    border: 3px solid #c9a018;
+}
+
+td.metric4 {
+    background-color: var(--background-color) ;
+    color: var(--secondary-text);
+    border: 3px solid var(--secondary-text);
 }
 
 form {

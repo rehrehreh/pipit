@@ -3,6 +3,9 @@
 <head>
     <title>Pipit</title>
     <script>
+        if (!localStorage.getItem('metricCookie')) {
+            localStorage.setItem('metricCookie', '0000000000000000000000000000'); // Set initial metric cookie
+        }
         function storeCursorPosition() {
             var input = document.getElementById("guess");
             localStorage.setItem("cursorPosition", input.selectionStart);
@@ -57,7 +60,7 @@
         // Show the popup
         document.getElementById('popup').style.display = 'block';
         // Close the popup when the close button is clicked
-        document.getElementById('close-popup').addEventListener('click', function()
+        document.addEventListener('click', function()
         {
             document.getElementById('popup').style.display = 'none';
             localStorage.setItem('popupShown', 'true'); // Mark the popup as shown
@@ -65,7 +68,7 @@
         }
     </script>
     <div class="container"></div>
-        <table>
+        <table class="main">
             <tbody>
                 <th>
                     Guess
@@ -117,6 +120,25 @@
     {% if message != '' %}
     <p class="{% if not valid_guess %}error{% endif %}">{{ message }}</p>
     {% endif %}
+    <div>
+        <table class="metric">
+            <tr>
+                {% for i in range(0,7) %}
+                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for i in range(7,14) %}
+                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for i in range(14,21) %}
+                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>
