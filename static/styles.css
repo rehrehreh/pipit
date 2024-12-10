@@ -127,6 +127,7 @@ td.paths.lost {
 
 table.metric {
     border-spacing: 5px 10px;
+    font-family: Arial, sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -134,34 +135,24 @@ table.metric {
     table-layout: auto;
 }
 
-td.metric0 {
-    background-color: #dd9f9f ;
+td.letter {
+    background-color: var(--background-color);
     color: var(--secondary-text);
-    border: var(--border-lost);
+    border: none;
+    text-transform: capitalize;
+    font-size: var(--font-small);
 }
 
-td.metric1 {
-    background-color: #9fb8dd ;
-    color: var(--secondary-text);
-    border: 3px solid  #5e48ad;
-}
-
-td.metric2 {
-    background-color: var(--primary-color);
+td.score0 {
+    background-color: var(--background-color) ;
     color: var(--secondary-text);
     border: var(--border);
 }
 
-td.metric3 {
-    background-color: #d4c16b ;
+td.score1 {
+    background-color: var(--primary-color) ;
     color: var(--secondary-text);
-    border: 3px solid #c9a018;
-}
-
-td.metric4 {
-    background-color: var(--background-color) ;
-    color: var(--secondary-text);
-    border: 3px solid var(--secondary-text);
+    border: var(--border);
 }
 
 form {

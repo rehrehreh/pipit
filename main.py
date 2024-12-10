@@ -50,24 +50,56 @@ def Play():
         session['message'] = ''
 
 
-    # Set cookie
-    metric = request.cookies.get('metricCookie')
-    print(metric)
-    if metric == None:
-        metric = '444444444444444444444'
+    # Set cookie Metric
 
-    # Update metric with last guess
-    metric = str(session['valid_guess']) + metric[0:-1] 
-    print(metric)
+    metric = request.cookies.get('metricCookie')
+    if metric == None:
+        #date num, #num wins
+        metric = '01,0;02,0;03,0;04,0;05,0;06,0;07,0;08,0;09,0;10,0;11,0;12,0'
+
+    # Set and compare seed for win
+    seed = str(game.seed)
+    seed_cookie = request.cookies.get('seedCookie')
+    if (seed_cookie == None or seed_cookie != seed) and (session['valid_guess']==2):
+        # Wooh, won! Update the seed_cookie and the metric
+        print('updating metric')
+        metric = update_metric(metric, seed)
+        seed_cookie = seed
+
+    metric_dict = metric_passthrough(metric)
     resp = make_response(render_template('index.html', full_stack=session['full_stack'],
                                             valid_guess = session['valid_guess'],
                                             message = session['message'],
-                                            metric = metric)) 
+                                            metric = metric_dict)) 
     resp.set_cookie('metricCookie', metric) 
+    resp.set_cookie('seedCookie', seed_cookie) 
     return resp
 
-    
+def metric_passthrough(metric):
+    metric_dict = {}
+    metric_mos = metric.split(';')
+    letters = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    for mo in metric_mos:
+        mo_data = mo.split(',')
+        month = str(mo_data[0])
+        metric_dict[month] = {} 
+        metric_dict[month]['score'] = int(mo_data[1])
+        metric_dict[month]['letter'] = str(letters[int(mo_data[0])-1])
+    return metric_dict
 
+def update_metric(metric, seed):
+    month = seed[4:6]
+    metric_mos = metric.split(';')
+    new_mos = []
+    for mo in metric_mos:
+        mo_data = mo.split(',')
+        if mo_data[0] == month:
+            mo_data[1] = str(int(mo_data[1])+1) 
+            print('updated')
+        mo_string = ','.join(mo_data)
+        new_mos.append(mo_string)
+    new_metric = ';'.join(new_mos)
+    return new_metric
 
 @app.route('/about') 
 def About(): 

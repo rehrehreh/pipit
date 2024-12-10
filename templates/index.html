@@ -122,21 +122,18 @@
     {% endif %}
     <div>
         <table class="metric">
+            {% for mo_list in [['01', '02', '03', '04', '05', '06'], ['07', '08', '09', '10', '11', '12']] %}
             <tr>
-                {% for i in range(0,7) %}
-                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
+                {% for month in mo_list %}        
+                    <td class="letter">{{ metric[month]['letter'] }}</td>
+                {% endfor %}
+            </tr>    
+            <tr>
+                {% for month in mo_list %}
+                    <td class="{{ 'score' + str(metric[month]['score']>0) }}">{{ metric[month]['score'] }}</td>
                 {% endfor %}
             </tr>
-            <tr>
-                {% for i in range(7,14) %}
-                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for i in range(14,21) %}
-                <td class="{{ 'metric'+ metric[i] }}">{{ metric[i] }}</td>
-                {% endfor %}
-            </tr>
+            {% endfor %}
         </table>
     </div>
 </body>
