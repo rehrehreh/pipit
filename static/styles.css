@@ -79,7 +79,7 @@ table.main {
 }
 
 
-th {
+table.main th {
     border: var(--border);
     color: var(--secondary-text);
     padding: var(--padding-header);
@@ -92,7 +92,7 @@ th {
 }
 
 
-td {
+table.main td {
     border: var(--border);
     padding: var(--padding-standard);
     border-radius: 5px;
@@ -146,7 +146,14 @@ table.metric {
     table-layout: auto;
 }
 
-td.letter {
+table.metric td {
+    padding: var(--padding-standard);
+    border-radius: 5px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+table.metric td.letter {
     background-color: var(--background-color);
     color: var(--secondary-text);
     border: none;
@@ -154,7 +161,7 @@ td.letter {
     font-size: var(--font-small);
 }
 
-td.header {
+table.metric td.header {
     background-color: var(--background-color);
     color: var(--secondary-text);
     border: none;
@@ -162,13 +169,13 @@ td.header {
     font-size: var(--font-medium);
 }
 
-td.score0 {
+table.metric td.score0 {
     background-color: var(--background-color) ;
     color: var(--secondary-text);
     border: var(--border);
 }
 
-td.score1 {
+table.metric td.score1 {
     background-color: var(--metric-color) ;
     color: var(--secondary-text);
     border: 3px solid #c0713c;
