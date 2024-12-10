@@ -306,7 +306,7 @@ nav {
     justify-content: space-between;
 }
 
-.popuptext {
+.popup2text {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -317,7 +317,7 @@ nav {
     overflow: auto; /* Enable scroll if needed */
 }
 
-.popuptext.show {
+.popup2text.show {
     position: absolute;
     bottom: 0;
     width: 80%;
@@ -343,7 +343,7 @@ nav {
 }
 
 
-#popup {
+#popup2 {
     display: none; /* Initially hidden */
     position: fixed;
     margin-top: 10%;
