@@ -43,27 +43,29 @@
     </form>
     <h1> </h1>
     <break></break>
-    <div id="popup">
+    <div id="popup2">
         <button id="close-popup">Close</button>
         <h2>Welcome to Pipit!</h2>
-        <p>Pipit is a daily word ladder game. The goal is to morph the starting word into the ending word by changing 1 letter at a time,
-            and the position of the letters is allowed to change between words. <br> <br>
-            The "Paths" number represents how many shortest paths still remain from your current word ladder to the end. <br> <br>
-            If you get stuck, enter "give up" to see a possible solution. <br>
-            If you want to try again, enter "...". <br> 
-            Click or hover on a word to see its definition. <br><br>
+        <p>Pipit is a daily word ladder game. <br>
+            Goal: Make the first word turn into the last word by changing one letter at a time. <br><br>
+            Note 1: Letters are allowed to change location in the next work. <br>
+            Note 2: Guess "..." to reset. <br>
+            Note 3: Type "give up" to see an answer. <br>
+            Note 4: The "Paths" number represents how many shortest paths still remain to the end. <br>
+            Note 5: Click or hover on a word to see its definition. <br> <br>
+            Click anywhere to close this. <br>
             Enjoy!
         </p>
     </div>
     <script>
-        if (!localStorage.getItem('popupShown')) {
+        if (!localStorage.getItem('popup2Shown')) {
         // Show the popup
-        document.getElementById('popup').style.display = 'block';
+        document.getElementById('popup2').style.display = 'block';
         // Close the popup when the close button is clicked
         document.addEventListener('click', function()
         {
-            document.getElementById('popup').style.display = 'none';
-            localStorage.setItem('popupShown', 'true'); // Mark the popup as shown
+            document.getElementById('popup2').style.display = 'none';
+            localStorage.setItem('popup2Shown', 'true'); // Mark the popup as shown
         });
         }
     </script>
