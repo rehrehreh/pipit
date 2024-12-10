@@ -121,7 +121,11 @@
     <p class="{% if not valid_guess %}error{% endif %}">{{ message }}</p>
     {% endif %}
     <div>
+        <hr>
         <table class="metric">
+            <tr> 
+                <td  class="header" colspan="6">Your Monthly Solve Statistics </td> 
+            </tr>
             {% for mo_list in [['01', '02', '03', '04', '05', '06'], ['07', '08', '09', '10', '11', '12']] %}
             <tr>
                 {% for month in mo_list %}        
@@ -130,7 +134,7 @@
             </tr>    
             <tr>
                 {% for month in mo_list %}
-                    <td class="{{ 'score' + str(metric[month]['score']>0) }}">{{ metric[month]['score'] }}</td>
+                    <td class="{{ metric[month]['class'] }}">{{ metric[month]['score'] }}</td>
                 {% endfor %}
             </tr>
             {% endfor %}

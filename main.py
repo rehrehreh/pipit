@@ -32,7 +32,7 @@ def Play():
         elif request.form['guess'] == '...':
             session['full_stack'] = game.starting_stack()
             session['valid_guess'] = 4
-            session['message'] = ''
+            session['message'] = 'Awaiting a guess...'
 
         elif request.form['guess'].lower() == 'give up':
             session['valid_guess'], session['message'], session['full_stack'] = game.give_up(full_stack = session['full_stack'])
@@ -47,7 +47,7 @@ def Play():
         session['user'] = request.remote_addr
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 4
-        session['message'] = ''
+        session['message'] = 'Awaiting a guess...'
 
 
     # Set cookie Metric
@@ -83,7 +83,12 @@ def metric_passthrough(metric):
         mo_data = mo.split(',')
         month = str(mo_data[0])
         metric_dict[month] = {} 
-        metric_dict[month]['score'] = int(mo_data[1])
+        score = int(mo_data[1])
+        metric_dict[month]['score'] = score
+        if score > 0:
+            metric_dict[month]['class'] = 'score1'
+        else:
+            metric_dict[month]['class'] = 'score0'
         metric_dict[month]['letter'] = str(letters[int(mo_data[0])-1])
     return metric_dict
 
