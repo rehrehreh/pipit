@@ -60,6 +60,9 @@ def Play():
     # Set and compare seed for win
     seed = str(game.seed)
     seed_cookie = request.cookies.get('seedCookie')
+    if seed_cookie == None:
+        seed_cookie = 0
+
     if (seed_cookie == None or seed_cookie != seed) and (session['valid_guess']==2):
         # Wooh, won! Update the seed_cookie and the metric
         print('updating metric')
