@@ -173,10 +173,12 @@ table.metric td.score0 {
     background-color: var(--background-color) ;
     color: var(--secondary-text);
     border: var(--border);
+    font-size: var(--font-medium);
 }
 
 table.metric td.score1 {
     background-color: var(--metric-color) ;
+    font-size: var(--font-medium);
     color: var(--secondary-text);
     border: 3px solid #c0713c;
 }
