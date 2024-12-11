@@ -38,9 +38,6 @@
         </li> 
         {% endfor %} 
     </nav>
-    <form action="/" method="post">
-        <input type="text" id="guess" name="guess" placeholder="Your guess..." autofocus onblur="storeCursorPosition()" spellcheck="false" autocomplete="off" autocorrect=""off>
-    </form>
     <h1> </h1>
     <break></break>
     <div id="popup2">
@@ -90,22 +87,15 @@
                                 <td class ="{{ key }}{% if full_stack[stack]['paths']==0 %} lost{% endif %}">{{ full_stack[stack]['paths'] }}</td>
                             {% endif %}
                         {% else %}
-                            <td class ="{{ key }}{% if full_stack[stack]['paths']==0 %} lost{% endif %}" id="{{ 'popup_' ~ rowloop.index0 }}">{{ full_stack[stack][key] }}
-                            {% if full_stack[stack]['def'] != '' %}
-                            <div class="popuptext" id="{{ 'popuptext_' ~ rowloop.index0 }}">{{ full_stack[stack]['def'] }}</div>
-                            <script>
-                                document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseenter',
-                                    () => {
-                                        document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}").classList.add('show');
-                                    });
-                        
-                                    document.getElementById("{{ 'popup_' ~ rowloop.index0 }}").addEventListener('mouseleave',
-                                    () => {
-                                        document.getElementById("{{ 'popuptext_' ~ rowloop.index0 }}").classList.remove('show');
-                                    });
-                            </script>
-                            {% endif %}
-                        </td>
+                            <td class ="{{ key }}{% if full_stack[stack]['paths']==0 %} lost{% endif %}">
+                                {% if stack|int in [0, 99] %}
+                                    {{ full_stack[stack]['word'] }}
+                                {% else %}
+                                    <form action="/" method="post">
+                                        <input type="text" id="{{ 'guess' + stack|string }}" name="{{ 'guess' + stack|string }}" placeholder="{{ full_stack[stack][key] }}" spellcheck="false" autocomplete="off" autocorrect="off">
+                                    </form>
+                                {% endif %}
+                            </td>
                         {% endif %}
                     {% endfor %}
                 </tr>

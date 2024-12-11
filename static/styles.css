@@ -185,7 +185,6 @@ table.metric td.score1 {
 
 form {
     width: auto; 
-    margin-top: 3%;
     margin-left: auto;
     margin-right: auto;
     align-items: center;
@@ -193,10 +192,8 @@ form {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* padding: 1%; */
-    /* border: 1px solid rgb(101, 179, 124); */
-    /* border-radius: 5px; */
-    /* background-color: #6c726d; */
+    border: none;
+
 } 
 
 input[type="text"] {
@@ -205,18 +202,16 @@ input[type="text"] {
     font-size: var(--font-medium);
     text-align: center;
     font-family: Arial, sans-serif;
-    padding: var(--padding-standard);
-    border: var(--border);
-    border-radius: 3px;
+    border: none;
     cursor: pointer;
-    text-transform: lowercase;
+    text-transform: uppercase;
 
 }
 
 input[type="text"]::placeholder {
     color: var(--primary-text);
     font-size: var(--font-medium);
-    text-transform: capitalize;
+    text-transform: uppercase;
 }
 
 

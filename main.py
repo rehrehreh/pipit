@@ -29,18 +29,26 @@ def Play():
         if request.method != 'POST':
             None
 
-        elif request.form['guess'] == '...':
-            session['full_stack'] = game.starting_stack()
-            session['valid_guess'] = 4
-            session['message'] = 'Awaiting a guess...'
-
-        elif request.form['guess'].lower() == 'give up':
-            session['valid_guess'], session['message'], session['full_stack'] = game.give_up(full_stack = session['full_stack'])
-
         else:
+            stack = session['full_stack']
+            guesses = {}
+            for guess in stack.keys():
+                if guess in [0, 99]:
+                    continue
+                guess_str = f'guess{str(guess)}'
+                value = request.form[guess_str].lower()
+                if value == '...' or value == stack[guess]['word']:
+                    # no change
+                    continue
+                else:
+                    guess = value
+                    position = guess
+                    break
+            
+
             # Guessing
             session['valid_guess'], session['message'], session['full_stack'] = \
-                game.check_guess(request.form['guess'].lower(), session['full_stack'])
+                game.check_guess(guess, position, session['full_stack'])
 
     else:
         session.permanent = True

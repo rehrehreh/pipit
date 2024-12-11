@@ -197,8 +197,15 @@ class Game():
     # Checking guess
 #############################
 
-    def check_guess(self, guess, full_stack):
+    def check_guess(self, guess, position, full_stack):
         # Returns valid guess, message, full_stack
+
+        # check if ...
+        reset, full_stack = self.check_dotdotdot(guess, full_stack)
+        if reset:
+            valid_guess = 1
+            message = 'Word reset'
+            return valid_guess, message, full_stack 
 
         # check if 5 letters
         valid_guess, message = self.check_is_5(guess)
@@ -207,15 +214,28 @@ class Game():
         if valid_guess:
             valid_guess, message = self.check_is_word(guess)
 
-        # Check if only changing 1 letter
-        if valid_guess:
-            valid_guess, message = self.check_change(guess, full_stack)
-
         # Update Stack
         if valid_guess:
-            full_stack = self.update_stack(guess, full_stack)
-        
+            full_stack = self.update_stack(guess, position, full_stack)
+            win = self.check_end(full_stack)
+            if win:
+                valid_guess = 2
+                message = 'You won!'
+
         return valid_guess, message, full_stack
+
+
+    def check_dotdotdot(guess, position, full_stack):
+        if guess == '...':
+            reset = True
+            full_stack[position] = {}
+            full_stack[position]['word'] = guess
+            full_stack[position]['paths'] = '??'
+            full_stack = dict(sorted(full_stack.items()))
+
+        else: 
+            reset = False
+        return reset, full_stack
 
     def check_is_5(self, guess):
         valid_guess = 1
@@ -235,26 +255,6 @@ class Game():
             valid_guess = 0
         return valid_guess, message
 
-
-    def check_change(self, guess, full_stack):
-        valid_guess = 1
-        message = self.valid_message
-        key = self.latest_word(full_stack)
-        last_word = full_stack[str(key)]['word']
-        current_counter = Counter(last_word)
-        guess_counter = Counter(guess)
-        end_counter = Counter(self.end)
-        shared_letters = sum((current_counter & guess_counter).values())
-        shared_letters_end = sum((guess_counter & end_counter).values())
-        if shared_letters != 4:
-            message = f'"{guess}" does not change only a single letter from "{last_word}", try again.'
-            valid_guess = 0
-        if shared_letters_end == 4 and valid_guess:
-            message = 'You win!'
-            valid_guess = 2
-        return valid_guess, message
-
-
 #####################################
 # Extracting the last word from full starting_stack
 ########################################
@@ -272,20 +272,35 @@ class Game():
         
         return max(temp)
     
-    def update_stack(self, guess, full_stack):
-        last_key = self.latest_word(full_stack)
-        stack_n = str(last_key+1)
-        full_stack[stack_n] = {}
-        full_stack[stack_n]['word'] = guess
-        full_stack[stack_n]['def'] = self.words[guess]['definition']
+    def update_stack(self, guess, position, full_stack):
+        full_stack[position] = {}
+        full_stack[position]['word'] = guess
+        full_stack[position]['def'] = self.words[guess]['definition']
+        possible_paths = self.find_paths(full_stack, position)
+        full_stack[position]['paths'] = len(possible_paths)
+        full_stack = dict(sorted(full_stack.items()))
+        return full_stack
 
+
+    def find_paths(self, full_stack):
         node_list = []
+        node_keys =[]
         for key in full_stack.keys():
             if full_stack[key]['word'] == '...' or int(key) == 99:
                 continue
             word = full_stack[key]['word']
             node_list.append(self.words[word]['node'])
-        current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
-        full_stack[stack_n]['paths'] = len(current_word_paths)
-        full_stack = dict(sorted(full_stack.items()))
-        return full_stack
+            node_keys.append(int(key))
+
+        possible_paths = [x for x in self.paths if x[node_keys] == node_list]
+        return possible_paths
+    
+    def check_end(self, full_stack):
+        for key in full_stack.keys():
+            if full_stack[key]['word'] == '...' or full_stack[key]['paths'] == 0:
+                # not done
+                return 0
+            else:
+                continue
+        return 1
+            
