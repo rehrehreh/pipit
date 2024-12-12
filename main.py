@@ -13,6 +13,7 @@ game = Game()
 # Flask startups
 app = Flask(__name__)
 app.secret_key = "meowmeowmeow"
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=120)
 nav = Navigation(app)
 nav.Bar('top', [ 
     nav.Item('Play', 'Play'),
@@ -30,6 +31,7 @@ def Play():
             None
 
         elif request.form['guess'] == '...':
+            session.clear()
             session['full_stack'] = game.starting_stack()
             session['valid_guess'] = 4
             session['message'] = 'Awaiting a guess...'
@@ -43,7 +45,8 @@ def Play():
                 game.check_guess(request.form['guess'].lower(), session['full_stack'])
 
     else:
-        session.permanent = True
+        session.clear()
+        session.permanent = False
         session['user'] = request.remote_addr
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 4
