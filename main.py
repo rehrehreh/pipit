@@ -4,7 +4,7 @@ import traceback
 collections.MutableMapping = collections.abc.MutableMapping
 collections.MutableSequence = collections.abc.MutableSequence
 collections.Iterable = collections.abc.Iterable
-from flask_navigation import Navigation 
+from flask_navigation import Navigation
 from game import Game
 from werkzeug.exceptions import InternalServerError
 from datetime import timedelta
