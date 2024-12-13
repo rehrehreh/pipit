@@ -15,7 +15,7 @@ game = Game()
 # Flask startups
 app = Flask(__name__)
 app.secret_key = "meowmeowmeow"
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=120)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 nav = Navigation(app)
 nav.Bar('top', [ 
     nav.Item('Play', 'Play'),
