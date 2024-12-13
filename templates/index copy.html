@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Input Form</title>
+</head>
+<body>
+    <h1>Enter Your Input:</h1>
+    <form action="/submit" method="post">
+        <input type="text" name="guess" placeholder="">
+        <button type="submit">Submit</button>
+    </form>
+    {% if game.message != '' %}
+        <h1>Message: {{ game.message }}</h1>
+    {% endif %}
+    <p>Start Word: {{ game.start }}</p>
+    <ul>
+        {% for word in game.word_stack %}
+            <li>{{ word }}</li>
+        {% endfor %}
+        {% if game.playing %}
+            <li>...</li>
+        {% endif %}
+    </ul>
+    <p>End Word: {{ game.end }}</p>
+</body>
+</html>
