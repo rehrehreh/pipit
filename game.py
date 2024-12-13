@@ -157,7 +157,7 @@ class Game():
 
         return full_stack
 
-    def give_up(self, full_stack):
+    def give_up(self, position, full_stack):
         random.seed(time.time() * 1000)
         # Node list for determining current paths
         node_list = []
@@ -178,20 +178,9 @@ class Game():
             use_num = int(random.random() * (len(self.paths)-1))
             use_path = self.paths[use_num]
 
-        # Returns valid guess, message, full_stack
-        full_stack = {}
-        node_list = []
-        for i, num in enumerate(use_path):
-            word = [x for x in self.words.keys() if self.words[x]['node'] == num][0]
-            node_list.append(num)
-            current_word_paths = [x for x in self.paths if x[0:len(node_list)] == node_list]
-            definition = self.words[word]['definition']
-
-            full_stack[i] = {}
-            full_stack[i]['word'] = word
-            full_stack[i]['def'] = definition
-            full_stack[i]['paths'] = len(current_word_paths)
-        return 3, 'This is one possible shortest path', full_stack
+        node = use_path[int(position)]
+        hint_word = [x for x in self.words.keys() if self.words[x]['node'] == node][0]
+        return hint_word
     
 #############################
     # Checking guess
@@ -201,12 +190,22 @@ class Game():
         # Returns valid guess, message, full_stack
 
         # check if ...
-        reset, full_stack = self.check_dotdotdot(guess, full_stack)
+        reset, full_stack = self.check_dotdotdot(guess, position, full_stack)
         if reset:
             valid_guess = 1
             message = 'Word reset'
             return valid_guess, message, full_stack 
 
+        # check if "give up"
+        if guess == 'give up':
+            hint_word = self.give_up(position, full_stack)
+            full_stack, zero_paths = self.update_stack(hint_word, position, full_stack)
+            message = "You're welcome loser."
+            valid
+            return valid_guess, message, full_stack 
+
+
+        ## Else, a real guess
         # check if 5 letters
         valid_guess, message = self.check_is_5(guess)
 
@@ -216,16 +215,19 @@ class Game():
 
         # Update Stack
         if valid_guess:
-            full_stack = self.update_stack(guess, position, full_stack)
+            full_stack, zero_paths = self.update_stack(guess, position, full_stack)
             win = self.check_end(full_stack)
             if win:
                 valid_guess = 2
                 message = 'You won!'
+            if zero_paths:
+                message = 'You are not on a possible shortest path. Use "..." to reset a word.'
+                valid_guess = 0
 
         return valid_guess, message, full_stack
 
 
-    def check_dotdotdot(guess, position, full_stack):
+    def check_dotdotdot(self, guess, position, full_stack):
         if guess == '...':
             reset = True
             full_stack[position] = {}
@@ -276,23 +278,19 @@ class Game():
         full_stack[position] = {}
         full_stack[position]['word'] = guess
         full_stack[position]['def'] = self.words[guess]['definition']
-        possible_paths = self.find_paths(full_stack, position)
+        possible_paths = self.find_paths(guess, position)
+        zero_paths = len(possible_paths) == 0
         full_stack[position]['paths'] = len(possible_paths)
         full_stack = dict(sorted(full_stack.items()))
-        return full_stack
+        return full_stack, zero_paths
 
 
-    def find_paths(self, full_stack):
-        node_list = []
-        node_keys =[]
-        for key in full_stack.keys():
-            if full_stack[key]['word'] == '...' or int(key) == 99:
-                continue
-            word = full_stack[key]['word']
-            node_list.append(self.words[word]['node'])
-            node_keys.append(int(key))
+    def find_paths(self, guess, position):
 
-        possible_paths = [x for x in self.paths if x[node_keys] == node_list]
+        node = self.words[guess]['node']
+        node_key = int(position)
+
+        possible_paths = [x for x in self.paths if x[node_key] == node]
         return possible_paths
     
     def check_end(self, full_stack):

@@ -32,35 +32,16 @@ def Play():
         if request.method != 'POST':
             None
 
-        elif request.form['guess'] == '...':
-            session.clear()
-            session['full_stack'] = game.starting_stack()
-            session['valid_guess'] = 4
-            session['message'] = 'Awaiting a guess...'
-
-        elif request.form['guess'].lower() == 'give up':
-            session['valid_guess'], session['message'], session['full_stack'] = game.give_up(full_stack = session['full_stack'])
-
         else:
-            stack = session['full_stack']
-            guesses = {}
-            for guess in stack.keys():
-                if guess in [0, 99]:
-                    continue
-                guess_str = f'guess{str(guess)}'
-                value = request.form[guess_str].lower()
-                if value == '...' or value == stack[guess]['word']:
-                    # no change
-                    continue
-                else:
-                    guess = value
-                    position = guess
+            for position in session['full_stack'].keys():
+                data = request.form.get(f'guess{str(position)}')
+                if data != None:
+                    guess_word = data.replace(' ', '')
                     break
-            
 
             # Guessing
             session['valid_guess'], session['message'], session['full_stack'] = \
-                game.check_guess(guess, position, session['full_stack'])
+                game.check_guess(guess_word, position, session['full_stack'])
 
     else:
         session.clear()
@@ -134,7 +115,6 @@ def update_metric(metric, seed):
 def About(): 
     return render_template('about.html') 
 
-
 @app.errorhandler(InternalServerError)
 def handle_exception(e):
     """Return JSON instead of HTML for 500 errors."""
@@ -154,4 +134,4 @@ def handle_exception(e):
     return response
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
