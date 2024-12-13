@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, session, make_response
+from flask import Flask, render_template, request, session, make_response, json
 import collections
+import traceback
 collections.MutableMapping = collections.abc.MutableMapping
 collections.MutableSequence = collections.abc.MutableSequence
 collections.Iterable = collections.abc.Iterable
-from flask_navigation import Navigation 
+from flask_navigation import Navigation
 from game import Game
+from werkzeug.exceptions import InternalServerError
 from datetime import timedelta
 
 # initialize game object
@@ -13,6 +15,7 @@ game = Game()
 # Flask startups
 app = Flask(__name__)
 app.secret_key = "meowmeowmeow"
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 nav = Navigation(app)
 nav.Bar('top', [ 
     nav.Item('Play', 'Play'),
@@ -28,6 +31,15 @@ def Play():
     if 'user' in session:
         if request.method != 'POST':
             None
+
+        elif request.form['guess'] == '...':
+            session.clear()
+            session['full_stack'] = game.starting_stack()
+            session['valid_guess'] = 4
+            session['message'] = 'Awaiting a guess...'
+
+        elif request.form['guess'].lower() == 'give up':
+            session['valid_guess'], session['message'], session['full_stack'] = game.give_up(full_stack = session['full_stack'])
 
         else:
             stack = session['full_stack']
@@ -51,7 +63,8 @@ def Play():
                 game.check_guess(guess, position, session['full_stack'])
 
     else:
-        session.permanent = True
+        session.clear()
+        session.permanent = False
         session['user'] = request.remote_addr
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 4
@@ -121,6 +134,24 @@ def update_metric(metric, seed):
 def About(): 
     return render_template('about.html') 
 
+
+@app.errorhandler(InternalServerError)
+def handle_exception(e):
+    """Return JSON instead of HTML for 500 errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    tb = e.original_exception.__traceback__
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+        "stack": session['full_stack'],
+        "metric": request.cookies.get('metricCookie'),
+        "exception": traceback.format_tb(tb),
+    })
+    response.content_type = "application/json"
+    return response
 
 if __name__ == "__main__":
     app.run()
