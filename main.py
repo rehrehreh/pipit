@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, session, make_response
+from flask import Flask, render_template, request, session, make_response, json
 import collections
+import traceback
 collections.MutableMapping = collections.abc.MutableMapping
 collections.MutableSequence = collections.abc.MutableSequence
 collections.Iterable = collections.abc.Iterable
 from flask_navigation import Navigation 
 from game import Game
+from werkzeug.exceptions import InternalServerError
 from datetime import timedelta
 
 # initialize game object
@@ -116,6 +118,24 @@ def update_metric(metric, seed):
 def About(): 
     return render_template('about.html') 
 
+
+@app.errorhandler(InternalServerError)
+def handle_exception(e):
+    """Return JSON instead of HTML for 500 errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    tb = e.original_exception.__traceback__
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+        "stack": session['full_stack'],
+        "metric": request.cookies.get('metricCookie'),
+        "exception": traceback.format_tb(tb),
+    })
+    response.content_type = "application/json"
+    return response
 
 if __name__ == "__main__":
     app.run()
