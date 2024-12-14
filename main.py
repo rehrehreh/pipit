@@ -70,7 +70,6 @@ def Play():
 
     if (seed_cookie != seed) and (session['valid_guess']==2):
         # Wooh, won! Update the seed_cookie and the metric
-        print('updating metric')
         metric = update_metric(metric, seed)
         seed_cookie = seed
 
@@ -108,7 +107,6 @@ def update_metric(metric, seed):
         mo_data = mo.split(',')
         if mo_data[0] == month:
             mo_data[1] = str(int(mo_data[1])+1) 
-            print('updated')
         mo_string = ','.join(mo_data)
         new_mos.append(mo_string)
     new_metric = ';'.join(new_mos)

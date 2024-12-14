@@ -69,7 +69,8 @@ class Game():
             equivalent = saved_config['seed'] == self.seed
             self.config_dict = saved_config
         except:
-            print('No config loaded, generating config')
+            None 
+            # Generating Config
         return equivalent
 
     def make_graph(self):
