@@ -50,6 +50,7 @@ def Play():
         session['full_stack'] = game.starting_stack()
         session['valid_guess'] = 4
         session['message'] = 'Awaiting a guess...'
+        session['used_hint'] = 0
 
 
     # Set cookie Metric
@@ -67,8 +68,11 @@ def Play():
 
     if (seed_cookie != seed) and (session['valid_guess']==2):
         # Wooh, won! Update the seed_cookie and the metric
-        print('updating metric')
         metric = update_metric(metric, seed)
+        seed_cookie = seed
+
+    if (seed_cookie != seed) and (session['valid_guess']==3):
+        # The user used a hint function, eliminate them from winning today
         seed_cookie = seed
 
     metric_dict = metric_passthrough(metric)

@@ -196,12 +196,12 @@ class Game():
             message = 'Word reset'
             return valid_guess, message, full_stack 
 
-        # check if "give up"
-        if guess == 'give up':
+        # check if "hint", previously known as give up
+        if guess == 'hint':
             hint_word = self.give_up(position, full_stack)
             full_stack, zero_paths = self.update_stack(hint_word, position, full_stack)
-            message = "You're welcome loser."
-            valid
+            message = "You're welcome, loser. Your win no longer counts."
+            valid_guess = 3
             return valid_guess, message, full_stack 
 
 
@@ -219,7 +219,7 @@ class Game():
             win = self.check_end(full_stack)
             if win:
                 valid_guess = 2
-                message = 'You won!'
+                message = 'You won! If you used no hints, your metric has been updated.'
             if zero_paths:
                 message = 'You are not on a possible shortest path. Use "..." to reset a word.'
                 valid_guess = 0
