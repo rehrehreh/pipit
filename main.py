@@ -109,7 +109,6 @@ def update_metric(metric, seed):
         mo_data = mo.split(',')
         if mo_data[0] == month:
             mo_data[1] = str(int(mo_data[1])+1) 
-            print('updated')
         mo_string = ','.join(mo_data)
         new_mos.append(mo_string)
     new_metric = ';'.join(new_mos)
