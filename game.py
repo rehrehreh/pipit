@@ -133,6 +133,7 @@ class Game():
         self.start_up()
         self.config_startup()
         full_stack = {}
+        n = 0
         for i in range(0, self.shortest_path):
             if i == 0:
                 # start
@@ -147,11 +148,12 @@ class Game():
                 full_stack[n] = {}
                 full_stack[n]['word'] = self.end
                 full_stack[n]['def'] = self.words[self.end]['definition']
-                full_stack[n]['paths'] = 1
+                full_stack[n]['paths'] = len(self.paths)
 
             else:
                 full_stack[i] = {}
-                full_stack[i]['word'] = '...'
+                word = '...'
+                full_stack[i]['word'] = word
                 full_stack[i]['def'] = ''
                 full_stack[i]['paths'] = '??'
 
@@ -200,7 +202,7 @@ class Game():
         if guess == 'hint':
             hint_word = self.give_up(position, full_stack)
             full_stack, zero_paths = self.update_stack(hint_word, position, full_stack)
-            message = "You're welcome, loser. Your win no longer counts."
+            message = "Database accessed for you. Sadly, a win will no longer count."
             valid_guess = 3
             return valid_guess, message, full_stack 
 
@@ -219,7 +221,7 @@ class Game():
             win = self.check_end(full_stack)
             if win:
                 valid_guess = 2
-                message = 'You won! If you used no hints, your metric has been updated.'
+                message = "You won! Your metric has been updated as long as you didn't use a hint."
             if zero_paths:
                 message = 'You are not on a possible shortest path. Use "..." to reset a word.'
                 valid_guess = 0
