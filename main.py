@@ -36,7 +36,7 @@ def Play():
             for position in session['full_stack'].keys():
                 data = request.form.get(f'guess{str(position)}')
                 if data != None:
-                    guess_word = data.replace(' ', '')
+                    guess_word = data.replace(' ', '').lower()
                     break
 
             # Guessing
